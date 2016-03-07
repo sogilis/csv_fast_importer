@@ -1,0 +1,8 @@
+#  username: root
+#  password:
+encoding: utf8
+host: localhost
+database: csv_fast_importer_test
+port: 5432
+adapter: postgresql
+min_messages: warning
