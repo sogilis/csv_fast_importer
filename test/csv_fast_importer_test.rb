@@ -9,7 +9,7 @@ describe 'When CSV file is imported with CsvFastImporter' do
     @csv_writer = CSVWriter.new 'test_kaamelott.csv'
     ActiveRecord::Base.connection.execute <<-SQL
       DROP TABLE IF EXISTS test_kaamelott;
-      CREATE TABLE test_kaamelott ( id serial NOT NULL, label varchar(32) NOT NULL );
+      CREATE TABLE test_kaamelott ( row_index int4 NULL, id serial NOT NULL, label varchar(32) NOT NULL );
     SQL
   end
 
@@ -129,6 +129,17 @@ describe 'When CSV file is imported with CsvFastImporter' do
 
     it 'a new line must be inserted' do
       assert_equal 1, sql_select('SELECT COUNT(*) FROM "special-character"').to_i
+    end
+  end
+
+  describe 'with custom row index column' do
+    before do
+      file = @csv_writer.create [ %w(id label), %w(1 kadoc), %w(2 lancelot) ]
+      CsvFastImporter.import file, row_index_column: 'row_index'
+    end
+
+    it 'should inserted row index in given column' do
+      assert_equal 2, sql_select("SELECT row_index FROM test_kaamelott WHERE label = 'lancelot'").to_i
     end
   end
 
