@@ -1,0 +1,8 @@
+language: ruby
+script:
+  - bundle exec rake test:db:create
+  - bundle exec rake test
+rvm:
+  2.2.0
+services:
+  postgresql
