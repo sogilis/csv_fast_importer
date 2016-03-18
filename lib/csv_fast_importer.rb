@@ -19,9 +19,9 @@ class CsvFastImporter
 
     row_count = 0
     sql_connection.transaction do
-      sql_connection.execute("DELETE FROM #{table_name}")
+      sql_connection.execute("DELETE FROM \"#{table_name}\"")
       sql_connection.raw_connection.copy_data <<-SQL do
-        COPY #{table_name}(#{column_names.join(',')})
+        COPY "#{table_name}" (#{column_names.join(',')})
         FROM STDIN
         DELIMITER '#{options[:col_sep]}'
         CSV

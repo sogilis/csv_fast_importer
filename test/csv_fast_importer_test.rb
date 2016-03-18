@@ -115,6 +115,23 @@ describe 'When CSV file is imported with CsvFastImporter' do
     end
   end
 
+  describe 'with "-" in destination table name' do
+
+    before do
+      ActiveRecord::Base.connection.execute <<-SQL
+        DROP TABLE IF EXISTS "special-character";
+        CREATE TABLE "special-character" ( label varchar NULL );
+      SQL
+      csv_writer = CSVWriter.new 'special-character.csv'
+      file = csv_writer.create [ %w(label), %w(kadoc) ]
+      @inserted_rows = CsvFastImporter.import file
+    end
+
+    it 'a new line must be inserted' do
+      assert_equal 1, sql_select('SELECT COUNT(*) FROM "special-character"').to_i
+    end
+  end
+
   def sql_select(sql_query)
     ActiveRecord::Base.connection.select_value sql_query
   end
@@ -123,3 +140,4 @@ describe 'When CSV file is imported with CsvFastImporter' do
     sql_select('SELECT COUNT(*) FROM test_kaamelott').to_i
   end
 end
+
