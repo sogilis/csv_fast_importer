@@ -129,3 +129,13 @@ In few words:
 > 2. MINOR version when you add functionality in a backwards-compatible manner,
 >    and
 > 3. PATCH version when you make backwards-compatible bug fixes.
+
+## To do
+
+- [ ] Check dependencies licences
+- [ ] Remove ActiveRecord dependency
+- [ ] Code Review
+- [ ] Find logo
+- [ ] Fix code Codacy coverage
+- [ ] Migrate to RSpec
+- [ ] Use a factory library to write CSV files
