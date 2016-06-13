@@ -9,31 +9,33 @@ class CsvFastImporter
   # TODO Check database is PostgreSQL
 
   # FIXME Remove defautl encoding
-  DEFAULT_OPTIONS = { col_sep: ';', encoding: 'UTF-8' , mapping: {} }
+  DEFAULT_OPTIONS = { col_sep: ';', encoding: 'UTF-8' , mapping: {}, row_index_column: nil }
 
   def self.import(file, new_options = {})
     options = DEFAULT_OPTIONS.merge(new_options)
 
     table_name = destination file, options
     column_names = columns file, options
+    column_names.unshift options[:row_index_column] unless options[:row_index_column].nil?
 
-    row_count = 0
+    row_index = 0
     sql_connection.transaction do
-      sql_connection.execute("DELETE FROM #{table_name}")
+      sql_connection.execute "DELETE FROM \"#{table_name}\""
       sql_connection.raw_connection.copy_data <<-SQL do
-        COPY #{table_name}(#{column_names.join(',')})
+        COPY "#{table_name}" (#{column_names.join(',')})
         FROM STDIN
         DELIMITER '#{options[:col_sep]}'
         CSV
         ENCODING '#{options[:encoding]}';
       SQL
         while line = file.gets do
-          row_count += 1
+          row_index += 1
+          line = row_index.to_s + options[:col_sep] + line unless options[:row_index_column].nil?
           sql_connection.raw_connection.put_copy_data line
         end
       end
     end
-    row_count
+    row_index
   end
 
   def self.destination(file, options)
