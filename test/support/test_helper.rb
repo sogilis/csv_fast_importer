@@ -1,3 +1,6 @@
+require 'codacy-coverage'
+Codacy::Reporter.start
+
 require 'active_record'
 require 'pathname'
 

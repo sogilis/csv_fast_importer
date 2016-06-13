@@ -22,23 +22,46 @@ GEM
       tzinfo (~> 1.1)
     arel (6.0.3)
     builder (3.2.2)
+    codacy-coverage (0.2.3)
+      rest-client (~> 1.8)
+      simplecov (~> 0.10.0)
+    docile (1.1.5)
+    domain_name (0.5.20160216)
+      unf (>= 0.0.5, < 1.0.0)
+    http-cookie (1.0.2)
+      domain_name (~> 0.5)
     i18n (0.7.0)
     json (1.8.3)
+    mime-types (2.99.1)
     minitest (5.8.3)
+    netrc (0.11.0)
     pg (0.18.4)
     rake (10.4.2)
+    rest-client (1.8.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
+    simplecov (0.10.0)
+      docile (~> 1.1.0)
+      json (~> 1.8)
+      simplecov-html (~> 0.10.0)
+    simplecov-html (0.10.0)
     thread_safe (0.3.5)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   bundler (~> 1.10)
+  codacy-coverage
   csv_fast_importer!
   pg (>= 0.18.4)
   rake (~> 10.0)
 
 BUNDLED WITH
-   1.10.6
+   1.11.2
