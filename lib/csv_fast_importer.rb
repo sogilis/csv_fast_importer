@@ -1,4 +1,4 @@
-require "csv_fast_importer/version"
+require 'csv_fast_importer/version'
 require 'active_record'
 
 class CsvFastImporter
