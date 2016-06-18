@@ -3,12 +3,6 @@ require 'active_record'
 
 class CsvFastImporter
 
-  # TODO Add parameter to prevent transaction usage
-  # TODO Allow caller to ignore columns
-  # TODO Alert when mapped column is not found
-  # TODO Check database is PostgreSQL
-
-  # FIXME Remove defautl encoding
   DEFAULT_OPTIONS = { col_sep: ';', encoding: 'UTF-8' , mapping: {}, row_index_column: nil }
 
   def self.import(file, new_options = {})
@@ -44,7 +38,6 @@ class CsvFastImporter
   end
 
   def self.columns(file, options)
-    # TODO Manage quotes
     file_columns = file.gets.split(options[:col_sep]).map &:strip
     map_columns file_columns, options[:mapping]
   end
