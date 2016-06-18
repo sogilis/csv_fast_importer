@@ -3,13 +3,10 @@ require_relative 'support/test_helper'
 require_relative 'support/csv_writer'
 
 describe CsvFastImporter do
+  include_context 'test_kaamelott table with columns row_index, id and label'
 
   before do
     @csv_writer = CSVWriter.new 'test_kaamelott.csv'
-    ActiveRecord::Base.connection.execute <<-SQL
-      DROP TABLE IF EXISTS test_kaamelott;
-      CREATE TABLE test_kaamelott ( row_index int4 NULL, id serial NOT NULL, label varchar(32) NOT NULL );
-    SQL
   end
 
   describe 'with custom column separator' do
@@ -140,14 +137,6 @@ describe CsvFastImporter do
     it 'should inserted row index in given column' do
       sql_select("SELECT row_index FROM test_kaamelott WHERE label = 'lancelot'").to_i.should eql 2
     end
-  end
-
-  def sql_select(sql_query)
-    ActiveRecord::Base.connection.select_value sql_query
-  end
-
-  def row_count
-    sql_select('SELECT COUNT(*) FROM test_kaamelott').to_i
   end
 end
 
