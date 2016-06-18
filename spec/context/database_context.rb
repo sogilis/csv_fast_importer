@@ -14,6 +14,14 @@ shared_context 'test_kaamelott table with columns row_index, id and label' do
     sql_select('SELECT COUNT(*) FROM test_kaamelott').to_i
   end
 
+  def table_empty?
+    row_count == 0
+  end
+
+  def insert_one_row
+    sql_execute("INSERT INTO test_kaamelott (id, label) VALUES (1, 'libelle')")
+  end
+
   def write_file(content, options = {})
     csv_writer.create content, options
   end

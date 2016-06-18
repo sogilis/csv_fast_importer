@@ -29,6 +29,10 @@ class Configuration
     row_index_column.present?
   end
 
+  def transactional?
+    @transactional ||= !(@parameters[:transaction] == :disabled)
+  end
+
 private
 
   def downcase_keys_and_values(hash)
