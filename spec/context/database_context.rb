@@ -8,7 +8,13 @@ shared_context 'test_kaamelott table with columns row_index, id and label' do
     SQL
   end
 
+  let(:csv_writer) { CSVWriter.new 'test_kaamelott.csv' }
+
   def row_count
     sql_select('SELECT COUNT(*) FROM test_kaamelott').to_i
+  end
+
+  def write_file(content, options = {})
+    csv_writer.create content, options
   end
 end
