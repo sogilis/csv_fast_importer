@@ -1,9 +1,8 @@
-require 'minitest/autorun'
-require_relative 'support/test_helper'
 require 'csv_fast_importer'
+require_relative 'support/test_helper'
 require_relative 'support/csv_writer'
 
-describe 'When CSV file is imported with CsvFastImporter' do
+describe CsvFastImporter do
 
   before do
     @csv_writer = CSVWriter.new 'test_kaamelott.csv'
@@ -20,7 +19,7 @@ describe 'When CSV file is imported with CsvFastImporter' do
     end
 
     it 'a new line must be inserted' do
-      assert_equal 1, row_count
+      row_count.should eql 1
     end
   end
 
@@ -31,7 +30,7 @@ describe 'When CSV file is imported with CsvFastImporter' do
     end
 
     it 'must import with correct encoding' do
-      assert_equal 'libellé', sql_select('SELECT label FROM test_kaamelott').to_s
+      sql_select('SELECT label FROM test_kaamelott').to_s.should eql 'libellé'
     end
   end
 
@@ -43,7 +42,7 @@ describe 'When CSV file is imported with CsvFastImporter' do
     end
 
     it 'a new line must be inserted' do
-      assert_equal 1, row_count
+      row_count.should eql 1
     end
   end
 
@@ -54,12 +53,12 @@ describe 'When CSV file is imported with CsvFastImporter' do
     end
 
     it 'a new line must be inserted' do
-      assert_equal 1, row_count
+      row_count.should eql 1
     end
 
     it 'with values given by CSV file' do
-      assert_equal 10, sql_select('SELECT id FROM test_kaamelott').to_i
-      assert_equal 'kadoc', sql_select('SELECT label FROM test_kaamelott').to_s
+      sql_select('SELECT id FROM test_kaamelott').to_i.should eql 10
+      sql_select('SELECT label FROM test_kaamelott').to_s.should eql 'kadoc'
     end
   end
 
@@ -70,12 +69,12 @@ describe 'When CSV file is imported with CsvFastImporter' do
 
     it 'with database column as string, a new line must be inserted' do
       CsvFastImporter.import @file, mapping: { libelle: 'label' }
-      assert_equal 1, row_count
+      row_count.should eql 1
     end
 
     it 'with file column as string, a new line must be inserted' do
       CsvFastImporter.import @file, mapping: { 'libelle' => :label }
-      assert_equal 1, row_count
+      row_count.should eql 1
     end
   end
 
@@ -86,12 +85,12 @@ describe 'When CSV file is imported with CsvFastImporter' do
 
     it 'with database column as string, a new line must be inserted' do
       CsvFastImporter.import @file, mapping: { libelle: 'label' }
-      assert_equal 1, row_count
+      row_count.should eql 1
     end
 
     it 'with file column as string, a new line must be inserted' do
       CsvFastImporter.import @file, mapping: { 'libelle' => :label }
-      assert_equal 1, row_count
+      row_count.should eql 1
     end
   end
 
@@ -102,16 +101,16 @@ describe 'When CSV file is imported with CsvFastImporter' do
     end
 
     it 'a new line must be inserted' do
-      assert_equal 1, row_count
+      row_count.should eql 1
     end
 
     it 'with values given by CSV file' do
-      assert_equal 10, sql_select('SELECT id FROM test_kaamelott').to_i
-      assert_equal 'kadoc', sql_select('SELECT label FROM test_kaamelott').to_s
+      sql_select('SELECT id FROM test_kaamelott').to_i.should eql 10
+      sql_select('SELECT label FROM test_kaamelott').to_s.should eql 'kadoc'
     end
 
     it 'must return inserted row count' do
-      assert_equal 1, @inserted_rows
+      @inserted_rows.should eql 1
     end
   end
 
@@ -128,7 +127,7 @@ describe 'When CSV file is imported with CsvFastImporter' do
     end
 
     it 'a new line must be inserted' do
-      assert_equal 1, sql_select('SELECT COUNT(*) FROM "special-character"').to_i
+      sql_select('SELECT COUNT(*) FROM "special-character"').to_i.should eql 1
     end
   end
 
@@ -139,7 +138,7 @@ describe 'When CSV file is imported with CsvFastImporter' do
     end
 
     it 'should inserted row index in given column' do
-      assert_equal 2, sql_select("SELECT row_index FROM test_kaamelott WHERE label = 'lancelot'").to_i
+      sql_select("SELECT row_index FROM test_kaamelott WHERE label = 'lancelot'").to_i.should eql 2
     end
   end
 

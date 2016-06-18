@@ -13,7 +13,7 @@ namespace :test do
       require 'pg'
       require 'yaml'
 
-      db_config = YAML.load_file('test/support/database.yml')
+      db_config = YAML.load_file('spec/support/database.yml')
       database_name = db_config['database']
       connection = PG.connect dbname: 'postgres', host: db_config['host'], port: db_config['port']
       connection.exec "CREATE DATABASE #{database_name}"
