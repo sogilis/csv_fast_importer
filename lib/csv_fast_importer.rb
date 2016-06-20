@@ -1,30 +1,28 @@
 require 'csv_fast_importer/version'
 require 'active_record'
+require 'configuration'
 
 class CsvFastImporter
 
-  DEFAULT_OPTIONS = { col_sep: ';', encoding: 'UTF-8' , mapping: {}, row_index_column: nil }
+  def self.import(file, parameters = {})
+    configuration = Configuration.new file, parameters
 
-  def self.import(file, new_options = {})
-    options = DEFAULT_OPTIONS.merge(new_options)
-
-    table_name = destination file, options
-    column_names = columns file, options
-    column_names.unshift options[:row_index_column] unless options[:row_index_column].nil?
+    sql_table = configuration.destination_table
+    sql_columns = column_names(file, configuration).join(',')
 
     row_index = 0
     sql_connection.transaction do
-      sql_connection.execute "DELETE FROM \"#{table_name}\""
+      sql_connection.execute "DELETE FROM \"#{sql_table}\""
       sql_connection.raw_connection.copy_data <<-SQL do
-        COPY "#{table_name}" (#{column_names.join(',')})
+        COPY "#{sql_table}" (#{sql_columns})
         FROM STDIN
-        DELIMITER '#{options[:col_sep]}'
+        DELIMITER '#{configuration.column_separator}'
         CSV
-        ENCODING '#{options[:encoding]}';
+        ENCODING '#{configuration.encoding}';
       SQL
         while line = file.gets do
           row_index += 1
-          line = row_index.to_s + options[:col_sep] + line unless options[:row_index_column].nil?
+          line.prepend row_index.to_s << configuration.column_separator if configuration.insert_row_index?
           sql_connection.raw_connection.put_copy_data line
         end
       end
@@ -32,22 +30,15 @@ class CsvFastImporter
     row_index
   end
 
-  def self.destination(file, options)
-    return options[:destination] if options.has_key? :destination
-    File.basename file, '.*'
-  end
-
-  def self.columns(file, options)
-    file_columns = file.gets.split(options[:col_sep]).map &:strip
-    map_columns file_columns, options[:mapping]
-  end
-
-  def self.map_columns(columns, mapping)
-    mapping_to_lower_case = Hash[mapping.map{ |k, v| [k.to_s.downcase, v.to_s.downcase] }]
-    columns.map(&:downcase).map do |column|
-      next mapping_to_lower_case[column].to_s if mapping_to_lower_case.has_key? column
-      column
-    end
+  def self.column_names(file, configuration)
+    file_columns = file.gets
+                       .split(configuration.column_separator)
+                       .map(&:strip)
+    sql_columns = file_columns.map(&:downcase).map do |column|
+                    configuration.mapping[column] || column
+                  end
+    sql_columns.unshift configuration.row_index_column if configuration.insert_row_index?
+    sql_columns
   end
 
   def self.sql_connection
