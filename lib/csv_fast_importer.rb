@@ -11,7 +11,7 @@ class CsvFastImporter
     sql_columns = column_names(file, configuration).join(',')
 
     row_index = 0
-    sql_connection.transaction do
+    within_transaction_if(configuration.transactional?) do
       sql_connection.execute "DELETE FROM \"#{sql_table}\""
       sql_connection.raw_connection.copy_data <<-SQL do
         COPY "#{sql_table}" (#{sql_columns})
@@ -39,6 +39,16 @@ class CsvFastImporter
                   end
     sql_columns.unshift configuration.row_index_column if configuration.insert_row_index?
     sql_columns
+  end
+
+  def self.within_transaction_if(transactional)
+    if transactional
+      sql_connection.transaction do
+        yield
+      end
+    else
+      yield
+    end
   end
 
   def self.sql_connection
