@@ -3,18 +3,11 @@ require_relative 'support/test_helper'
 require_relative 'support/csv_writer'
 
 describe CsvFastImporter do
-
-  before do
-    @csv_writer = CSVWriter.new 'test_kaamelott.csv'
-    ActiveRecord::Base.connection.execute <<-SQL
-      DROP TABLE IF EXISTS test_kaamelott;
-      CREATE TABLE test_kaamelott ( row_index int4 NULL, id serial NOT NULL, label varchar(32) NOT NULL );
-    SQL
-  end
+  include_context 'test_kaamelott table with columns row_index, id and label'
 
   describe 'with custom column separator' do
     before do
-      file = @csv_writer.create [ %w(label id), %w(kadoc 10) ], col_sep: '|'
+      file = write_file [ %w(label id), %w(kadoc 10) ], col_sep: '|'
       CsvFastImporter.import file, col_sep: '|'
     end
 
@@ -25,7 +18,7 @@ describe CsvFastImporter do
 
   describe 'with custom file encoding' do
     before do
-      file = @csv_writer.create [ %w(label id), %w(libellé 10) ], encoding: 'ISO-8859-1'
+      file = write_file [ %w(label id), %w(libellé 10) ], encoding: 'ISO-8859-1'
       CsvFastImporter.import file, encoding: 'ISO-8859-1'
     end
 
@@ -36,7 +29,7 @@ describe CsvFastImporter do
 
   describe 'with custom file table destination' do
     before do
-      filepath = @csv_writer.create [ %w(label id), %w(kadoc 10) ]
+      filepath = write_file [ %w(label id), %w(kadoc 10) ]
       @file = File.new filepath
       CsvFastImporter.import @file, destination: 'test_kaamelott'
     end
@@ -48,7 +41,7 @@ describe CsvFastImporter do
 
   describe 'without same column order between csv header and database table' do
     before do
-      file = @csv_writer.create [ %w(label id), %w(kadoc 10) ]
+      file = write_file [ %w(label id), %w(kadoc 10) ]
       CsvFastImporter.import file
     end
 
@@ -64,7 +57,7 @@ describe CsvFastImporter do
 
   describe 'with column mapping' do
     before do
-      @file = @csv_writer.create [ %w(id label), %w(10 kadoc) ]
+      @file = write_file [ %w(id label), %w(10 kadoc) ]
     end
 
     it 'with database column as string, a new line must be inserted' do
@@ -80,7 +73,7 @@ describe CsvFastImporter do
 
   describe 'with column mapping and upper case file header' do
     before do
-      @file = @csv_writer.create [ %w(ID LIBELLE), %w(10 kadoc) ]
+      @file = write_file [ %w(ID LIBELLE), %w(10 kadoc) ]
     end
 
     it 'with database column as string, a new line must be inserted' do
@@ -96,7 +89,7 @@ describe CsvFastImporter do
 
   describe 'with default values' do
     before do
-      file = @csv_writer.create [ %w(id label), %w(10 kadoc) ]
+      file = write_file [ %w(id label), %w(10 kadoc) ]
       @inserted_rows = CsvFastImporter.import file
     end
 
@@ -133,21 +126,13 @@ describe CsvFastImporter do
 
   describe 'with custom row index column' do
     before do
-      file = @csv_writer.create [ %w(id label), %w(1 kadoc), %w(2 lancelot) ]
+      file = write_file [ %w(id label), %w(1 kadoc), %w(2 lancelot) ]
       CsvFastImporter.import file, row_index_column: 'row_index'
     end
 
     it 'should inserted row index in given column' do
       sql_select("SELECT row_index FROM test_kaamelott WHERE label = 'lancelot'").to_i.should eql 2
     end
-  end
-
-  def sql_select(sql_query)
-    ActiveRecord::Base.connection.select_value sql_query
-  end
-
-  def row_count
-    sql_select('SELECT COUNT(*) FROM test_kaamelott').to_i
   end
 end
 

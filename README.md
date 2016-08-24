@@ -49,8 +49,8 @@ For instance, a `FIRSTNAME` CSV column will be mapped to the `firstname` field.
 
 | Option key | Purpose | Default value |
 | ------------ | ------------- | ------------- |
-| *encoding* | File encoding | `UTF-8` |
-| *col_sep* | Column separator in file | `;` |
+| *encoding* | File encoding | `'UTF-8'` |
+| *col_sep* | Column separator in file | `';'` |
 | *destination* | Destination table | given base filename (without extension) |
 | *mapping* | Column mapping | `{}` |
 | *row_index_column* | Column name where inserting file row index (not used when `nil`) | `nil` |
@@ -96,21 +96,6 @@ To map the `CUSTOMER_EMAIL` column to the `email` database field:
 CsvFastImporter.import file, mapping: { email: :customer_email }
 ```
 
-## Running tests
-
-If you want to contribute, you will need to run the test suite. First of all,
-make sure to setup a PostgreSQL database by running the provided Rake task:
-
-```sh
-$ rake test:db:create
-```
-
-Then, running the test suite is as simple as:
-
-```sh
-$ rake test
-```
-
 ## Versioning
 
 `master` is the development branch and releases are published as tags.
@@ -129,3 +114,24 @@ In few words:
 > 2. MINOR version when you add functionality in a backwards-compatible manner,
 >    and
 > 3. PATCH version when you make backwards-compatible bug fixes.
+
+## How to contribute?
+
+You can fork and submit new pull request (with tests and explanations).
+First of all, you need to initialize your environment :
+
+```sh
+$ bundle install
+```
+
+Then, start your PostgreSQL database and setup database environment:
+
+```sh
+$ rake test:db:create
+```
+
+Finally, you can run all tests with RSpec like this:
+
+```sh
+$ rspec spec
+```

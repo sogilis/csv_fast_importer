@@ -16,3 +16,9 @@ ActiveRecord::Schema.define do
 =end
 
 end
+
+module DatabaseHelper
+  def sql_select(sql_query)
+    ActiveRecord::Base.connection.select_value sql_query
+  end
+end
