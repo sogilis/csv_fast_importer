@@ -49,8 +49,8 @@ For instance, a `FIRSTNAME` CSV column will be mapped to the `firstname` field.
 
 | Option key | Purpose | Default value |
 | ------------ | ------------- | ------------- |
-| *encoding* | File encoding | `UTF-8` |
-| *col_sep* | Column separator in file | `;` |
+| *encoding* | File encoding | `'UTF-8'` |
+| *col_sep* | Column separator in file | `';'` |
 | *destination* | Destination table | given base filename (without extension) |
 | *mapping* | Column mapping | `{}` |
 | *row_index_column* | Column name where inserting file row index (not used when `nil`) | `nil` |
