@@ -4,5 +4,10 @@ script:
   - bundle exec rspec spec
 rvm:
   2.2.0
-services:
-  postgresql
+matrix:
+  include:
+    - env:
+      - DB_TYPE=mysql
+      - DB_USERNAME=travis
+    - env:
+      - DB_TYPE=postgres

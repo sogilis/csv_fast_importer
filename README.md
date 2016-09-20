@@ -8,8 +8,14 @@ designed to be as faster as possible.
 
 ## Requirements
 
-- PostgreSQL
 - Rails (ActiveRecord in fact)
+- PostgreSQL or MySQL
+- MySQL only: enable `local_infile` parameter (add `local_infile: true` to your database config file `databse.yml`)
+
+## Limitations
+- MySQL: encoding is not supported yet
+- MySQL: transaction is not supported yet
+- MySQL: row_index is not supported yet
 
 ## Installation
 
@@ -49,16 +55,16 @@ For instance, a `FIRSTNAME` CSV column will be mapped to the `firstname` field.
 
 | Option key | Purpose | Default value |
 | ------------ | ------------- | ------------- |
-| *encoding* | File encoding | `'UTF-8'` |
+| *encoding* | File encoding. PostgreSQL only| `'UTF-8'` |
 | *col_sep* | Column separator in file | `';'` |
 | *destination* | Destination table | given base filename (without extension) |
 | *mapping* | Column mapping | `{}` |
-| *row_index_column* | Column name where inserting file row index (not used when `nil`) | `nil` |
-| *transaction* | Execute DELETE and INSERT in same transaction | `:enabled` |
+| *row_index_column* | Column name where inserting file row index (not used when `nil`). PostgreSQL only | `nil` |
+| *transaction* | Execute DELETE and INSERT in same transaction. PostgreSQL only | `:enabled` |
 | *deletion* | Row deletion method (`:delete` for SQL DELETE, `:truncate` for SQL TRUNCATE or `:none` for no deletion before import) | `:delete` |
 
 Your CSV file should be encoding in UTF-8 but you can specify another encoding
-with the `encoding` option.
+with the `encoding` option (PostgreSQL only).
 
 ```ruby
 CsvFastImporter.import file, encoding: 'ISO-8859-1'
@@ -107,17 +113,28 @@ First of all, you need to initialize your environment :
 $ bundle install
 ```
 
-Then, start your PostgreSQL database and setup database environment:
+Then, start your PostgreSQL database (ex: [Postgres.app](http://postgresapp.com) for the Mac) and setup database environment:
 
 ```sh
 $ bundle exec rake test:db:create
 ```
+This will connect to `localhost` PostgreSQL database without user (see `config/database.postgres.yml`) and create a new database dedicated to tests.
 
 Finally, you can run all tests with RSpec like this:
 
 ```sh
-$ bundle exec rspec spec
+$ bundle exec rspec
 ```
+
+By default, PostgreSQL is used. You can set another database with environment variables like this for MySQL:
+```sh
+$ DB_TYPE=mysql DB_ROOT_PASSWORD=password DB_USERNAME=username bundle exec rake test:db:create
+$ DB_TYPE=mysql DB_USERNAME=username bundle exec rspec
+```
+This will connect to mysql with `root` user (with `password` as password) and create database for user `username`.
+Use `DB_TYPE=mysql DB_USERNAME=` (with empty username) for anonymous account.
+
+*Warning*: Mysql tests require your local database permits LOCAL works. Check your Mysql instance with following command: `SHOW GLOBAL VARIABLES LIKE 'local_infile'` (should be `ON`).
 
 ## Versioning
 
@@ -137,3 +154,17 @@ In few words:
 > 2. MINOR version when you add functionality in a backwards-compatible manner,
 >    and
 > 3. PATCH version when you make backwards-compatible bug fixes.
+
+## Roadmap
+
+- [ ] Tests + README : change customer/kaamelott_test by knights
+- [ ] Move classes in dedicated module (to prevent collisions in target application)
+- [ ] Document supported database (#29)
+- [ ] Code Review
+- [ ] Publish gem (#30)
+- [ ] MySQL: support encoding parameter. See https://dev.mysql.com/doc/refman/5.5/en/charset-charsets.html
+- [ ] MySQL: support transaction parameter
+- [ ] MySQL: support row_index_column parameter
+- [ ] MySQL: Run multiple SQL queries in single statement
+- [ ] Specify supported database versions (MySQL & PostgreSQL)
+- [ ] Refactor tests (with should-> must / should -> expect / subject...)

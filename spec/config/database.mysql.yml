@@ -1,0 +1,7 @@
+adapter: mysql2
+encoding: utf8
+username: mysql_username
+host: localhost
+database: csv_fast_importer_test
+min_messages: warning
+local_infile: true

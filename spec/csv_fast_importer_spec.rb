@@ -3,6 +3,7 @@ require_relative 'support/test_helper'
 require_relative 'support/csv_writer'
 
 describe CsvFastImporter do
+  include DatabaseHelper
   include_context 'test_kaamelott table with columns row_index, id and label'
 
   describe 'with custom column separator' do
@@ -16,14 +17,14 @@ describe CsvFastImporter do
     end
   end
 
-  describe 'with custom file encoding' do
+  describe 'with custom file encoding', skip_mysql: true do
     before do
       file = write_file [ %w(label id), %w(libellé 10) ], encoding: 'ISO-8859-1'
       CsvFastImporter.import file, encoding: 'ISO-8859-1'
     end
 
     it 'must import with correct encoding' do
-      sql_select('SELECT label FROM test_kaamelott').to_s.should eql 'libellé'
+      db.query('SELECT label FROM test_kaamelott').to_s.should eql 'libellé'
     end
   end
 
@@ -50,8 +51,8 @@ describe CsvFastImporter do
     end
 
     it 'with values given by CSV file' do
-      sql_select('SELECT id FROM test_kaamelott').to_i.should eql 10
-      sql_select('SELECT label FROM test_kaamelott').to_s.should eql 'kadoc'
+      db.query('SELECT id FROM test_kaamelott').to_i.should eql 10
+      db.query('SELECT label FROM test_kaamelott').to_s.should eql 'kadoc'
     end
   end
 
@@ -87,10 +88,10 @@ describe CsvFastImporter do
     end
   end
 
-  describe 'with default values' do
+  describe 'with default configuration' do
     before do
       file = write_file [ %w(id label), %w(10 kadoc) ]
-      @inserted_rows = CsvFastImporter.import file
+      @inserted_rows_count = CsvFastImporter.import file
     end
 
     it 'a new line must be inserted' do
@@ -98,12 +99,12 @@ describe CsvFastImporter do
     end
 
     it 'with values given by CSV file' do
-      sql_select('SELECT id FROM test_kaamelott').to_i.should eql 10
-      sql_select('SELECT label FROM test_kaamelott').to_s.should eql 'kadoc'
+      db.query('SELECT id FROM test_kaamelott').to_i.should eql 10
+      db.query('SELECT label FROM test_kaamelott').to_s.should eql 'kadoc'
     end
 
     it 'must return inserted row count' do
-      @inserted_rows.should eql 1
+      @inserted_rows_count.should eql 1
     end
   end
 
@@ -111,44 +112,49 @@ describe CsvFastImporter do
 
     before do
       ActiveRecord::Base.connection.execute <<-SQL
-        DROP TABLE IF EXISTS "special-character";
-        CREATE TABLE "special-character" ( label varchar NULL );
+        DROP TABLE IF EXISTS #{db.identify('special-character')};
+      SQL
+      ActiveRecord::Base.connection.execute <<-SQL
+        CREATE TABLE #{db.identify('special-character')} ( label varchar(32) NULL );
       SQL
       csv_writer = CSVWriter.new 'special-character.csv'
       file = csv_writer.create [ %w(label), %w(kadoc) ]
-      @inserted_rows = CsvFastImporter.import file
+      CsvFastImporter.import file
     end
 
     it 'a new line must be inserted' do
-      sql_select('SELECT COUNT(*) FROM "special-character"').to_i.should eql 1
+      db.query("SELECT COUNT(*) FROM #{db.identify('special-character')}").to_i.should eql 1
     end
   end
 
   describe 'with database column with special character' do
 
     before do
+      # TODO Execute multiple SQL queries with one statement (MySQL)
       ActiveRecord::Base.connection.execute <<-SQL
-        DROP TABLE IF EXISTS test_kaamelott;
-        CREATE TABLE test_kaamelott ( "-label" varchar NULL );
+        DROP TABLE IF EXISTS #{db.identify('test_kaamelott')};
+      SQL
+      ActiveRecord::Base.connection.execute <<-SQL
+        CREATE TABLE #{db.identify('test_kaamelott')} ( #{db.identify('-label')} varchar(32) NULL );
       SQL
       csv_writer = CSVWriter.new 'test_kaamelott.csv'
       file = csv_writer.create [ %w(-label), %w(kadoc) ]
-      @inserted_rows = CsvFastImporter.import file
+      CsvFastImporter.import file
     end
 
     it 'should escape column names' do
-      sql_select('SELECT COUNT(*) FROM test_kaamelott').to_i.should eql 1
+      db.query('SELECT COUNT(*) FROM test_kaamelott').to_i.should eql 1
     end
   end
 
-  describe 'with custom row index column' do
+  describe 'with custom row index column', skip_mysql: true do
     before do
       file = write_file [ %w(id label), %w(1 kadoc), %w(2 lancelot) ]
       CsvFastImporter.import file, row_index_column: 'row_index'
     end
 
     it 'should inserted row index in given column' do
-      sql_select("SELECT row_index FROM test_kaamelott WHERE label = 'lancelot'").to_i.should eql 2
+      db.query("SELECT row_index FROM test_kaamelott WHERE label = 'lancelot'").to_i.should eql 2
     end
   end
 
@@ -156,11 +162,15 @@ describe CsvFastImporter do
     before do
       insert_one_row
       file = write_file [ %w(id label), %w(10 kadoc) ]
-      CsvFastImporter.import file, deletion: :none
+      @inserted_rows_count = CsvFastImporter.import file, deletion: :none
     end
 
     it 'should append imported file to existing rows' do
       row_count.should eql 2
+    end
+
+    it 'should return inserted rows count' do
+      @inserted_rows_count.should eql 1
     end
   end
 end

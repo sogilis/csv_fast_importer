@@ -1,5 +1,7 @@
 class Configuration
 
+  attr_accessor :file
+
   def initialize(file, parameters = {})
     @file = file
     @parameters = parameters
@@ -25,12 +27,12 @@ class Configuration
     @row_index_column ||= @parameters[:row_index_column]
   end
 
-  def insert_row_index?
-    row_index_column.present?
-  end
-
   def transactional?
     @transactional ||= !(@parameters[:transaction] == :disabled)
+  end
+
+  def transactional_forced?
+    @transactional_forced ||= (@parameters[:transaction] == :enabled)
   end
 
   def truncate?
