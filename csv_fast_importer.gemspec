@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Sogilis"]
   spec.email         = ["sogilis@sogilis.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = "Fast CSV Importer"
+  spec.description   = "Import CSV files' content into a PostgreSQL database. It is based on the Postgre COPY command which is designed to be as faster as possible."
+  spec.homepage      = "https://github.com/sogilis/csv_fast_importer"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
