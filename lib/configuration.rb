@@ -33,6 +33,10 @@ class Configuration
     @transactional ||= !(@parameters[:transaction] == :disabled)
   end
 
+  def truncate?
+    @deletion ||= @parameters[:deletion] == :truncate
+  end
+
 private
 
   def downcase_keys_and_values(hash)

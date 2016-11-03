@@ -12,7 +12,11 @@ class CsvFastImporter
 
     row_index = 0
     within_transaction_if(configuration.transactional?) do
-      sql_connection.execute "DELETE FROM \"#{sql_table}\""
+      if configuration.truncate?
+        sql_connection.execute "TRUNCATE TABLE \"#{sql_table}\""
+      else
+        sql_connection.execute "DELETE FROM \"#{sql_table}\""
+      end
       sql_connection.raw_connection.copy_data <<-SQL do
         COPY "#{sql_table}" (#{sql_columns})
         FROM STDIN
