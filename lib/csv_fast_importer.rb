@@ -40,9 +40,9 @@ class CsvFastImporter
     file_columns = file.gets
                        .split(configuration.column_separator)
                        .map(&:strip)
-    sql_columns = file_columns.map(&:downcase).map do |column|
-                    configuration.mapping[column] || column
-                  end
+    sql_columns = file_columns.map(&:downcase)
+                  .map { |column| configuration.mapping[column] || column }
+                  .map { |column| "\"#{column}\"" }
     sql_columns.unshift configuration.row_index_column if configuration.insert_row_index?
     sql_columns
   end
