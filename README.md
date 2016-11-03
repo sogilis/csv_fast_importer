@@ -55,6 +55,7 @@ For instance, a `FIRSTNAME` CSV column will be mapped to the `firstname` field.
 | *mapping* | Column mapping | `{}` |
 | *row_index_column* | Column name where inserting file row index (not used when `nil`) | `nil` |
 | *transaction* | Execute DELETE and INSERT in same transaction | `:enabled` |
+| *deletion* | Row deletion method (`:delete` for SQL DELETE or `:truncate` for SQL TRUNCATE) | `:delete` |
 
 Your CSV file should be encoding in UTF-8 but you can specify another encoding
 with the `encoding` option.
