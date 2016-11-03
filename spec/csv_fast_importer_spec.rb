@@ -124,6 +124,23 @@ describe CsvFastImporter do
     end
   end
 
+  describe 'with database column with special character' do
+
+    before do
+      ActiveRecord::Base.connection.execute <<-SQL
+        DROP TABLE IF EXISTS test_kaamelott;
+        CREATE TABLE test_kaamelott ( "-label" varchar NULL );
+      SQL
+      csv_writer = CSVWriter.new 'test_kaamelott.csv'
+      file = csv_writer.create [ %w(-label), %w(kadoc) ]
+      @inserted_rows = CsvFastImporter.import file
+    end
+
+    it 'should escape column names' do
+      sql_select('SELECT COUNT(*) FROM test_kaamelott').to_i.should eql 1
+    end
+  end
+
   describe 'with custom row index column' do
     before do
       file = write_file [ %w(id label), %w(1 kadoc), %w(2 lancelot) ]
