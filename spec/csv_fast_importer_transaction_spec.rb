@@ -40,7 +40,7 @@ describe CsvFastImporter do
       end
     end
 
-    describe 'with enabled disabled' do
+    describe 'with disabled transaction' do
       before do
         import_with_exception transaction: :disabled
       end
