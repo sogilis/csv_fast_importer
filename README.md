@@ -128,11 +128,11 @@ $ bundle install
 Then, start your PostgreSQL database and setup database environment:
 
 ```sh
-$ rake test:db:create
+$ bundle exec rake test:db:create
 ```
 
 Finally, you can run all tests with RSpec like this:
 
 ```sh
-$ rspec spec
+$ bundle exec rspec spec
 ```
