@@ -134,5 +134,17 @@ describe CsvFastImporter do
       sql_select("SELECT row_index FROM test_kaamelott WHERE label = 'lancelot'").to_i.should eql 2
     end
   end
+
+  describe 'without deletion' do
+    before do
+      insert_one_row
+      file = write_file [ %w(id label), %w(10 kadoc) ]
+      CsvFastImporter.import file, deletion: :none
+    end
+
+    it 'should append imported file to existing rows' do
+      row_count.should eql 2
+    end
+  end
 end
 

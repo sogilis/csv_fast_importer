@@ -37,6 +37,10 @@ class Configuration
     @deletion ||= @parameters[:deletion] == :truncate
   end
 
+  def deletion?
+    @deletion ||= !(@parameters[:deletion] == :none)
+  end
+
 private
 
   def downcase_keys_and_values(hash)
