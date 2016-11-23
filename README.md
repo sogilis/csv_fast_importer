@@ -98,25 +98,6 @@ To map the `CUSTOMER_EMAIL` column to the `email` database field:
 CsvFastImporter.import file, mapping: { email: :customer_email }
 ```
 
-## Versioning
-
-`master` is the development branch and releases are published as tags.
-
-**We're not ready for the production yet (version < 1.0) so use this gem with
-precaution.**
-
-We follow the [Semantic Versioning 2.0.0](http://semver.org/) for our gem
-releases.
-
-In few words:
-
-> Given a version number MAJOR.MINOR.PATCH, increment the:
->
-> 1. MAJOR version when you make incompatible API changes,
-> 2. MINOR version when you add functionality in a backwards-compatible manner,
->    and
-> 3. PATCH version when you make backwards-compatible bug fixes.
-
 ## How to contribute?
 
 You can fork and submit new pull request (with tests and explanations).
@@ -137,3 +118,22 @@ Finally, you can run all tests with RSpec like this:
 ```sh
 $ bundle exec rspec spec
 ```
+
+## Versioning
+
+`master` is the development branch and releases are published as tags.
+
+**We're not ready for the production yet (version < 1.0) so use this gem with
+precaution.**
+
+We follow the [Semantic Versioning 2.0.0](http://semver.org/) for our gem
+releases.
+
+In few words:
+
+> Given a version number MAJOR.MINOR.PATCH, increment the:
+>
+> 1. MAJOR version when you make incompatible API changes,
+> 2. MINOR version when you add functionality in a backwards-compatible manner,
+>    and
+> 3. PATCH version when you make backwards-compatible bug fixes.
