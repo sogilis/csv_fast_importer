@@ -34,14 +34,18 @@ module Benchmark
     rows = [*1..TOTAL_ROW_COUNT].map { %w(Karadoc, yes) }
     file = CSVWriter.new('knights.csv').create(header + rows)
 
-    puts "Run CsvFastImporter..."
-    csv_fast_importer_time = time { CsvFastImporter.import file }
-    native_active_record_create_time = native_active_record_create(file)
+    subjects = {
+      'CsvFastImporter' => :csv_fast_importer,
+      'CSV + native ActiveRecord #create!' => :csv_and_native_active_record_create,
+      'smarted_csv + native ActiveRecord #create!' => :smarter_csv_and_csv_and_native_active_record_create
+    }
 
     puts ""
-    puts "Results:"
-    puts "CsvFastImporter: #{csv_fast_importer_time}s"
-    puts "Native ActiveRecord #create!: #{native_active_record_create_time}s"
+    puts "Benchmarking..."
+    subjects.each do |label, method|
+      duration = time { send(method, file) }
+      puts "#{label}: #{duration}s"
+    end
     puts ""
     puts "Benchmark finished."
   end
@@ -52,12 +56,24 @@ module Benchmark
     Time.now - start_time
   end
 
-  def self.native_active_record_create(file)
+  def self.csv_fast_importer(file)
+    CsvFastImporter.import file
+  end
+
+  def self.csv_and_native_active_record_create(file)
     csv = CSV.parse(File.read(file), headers: true, col_sep: ';')
     time do
       csv.each do |row|
         Knight.create!(row.to_hash)
       end
+    end
+  end
+
+  # Variable : chunk size
+  def self.smarter_csv_and_csv_and_native_active_record_create(file)
+    require 'smarter_csv'
+    SmarterCSV.process(file.path, chunk_size: 100, col_sep: ';') do |knights|
+      Knight.create! knights
     end
   end
 end
