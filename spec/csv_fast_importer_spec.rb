@@ -112,7 +112,7 @@ describe CsvFastImporter do
     end
   end
 
-  describe 'with "-" in destination table name' do
+  describe 'with special character in destination table name' do
 
     before do
       ActiveRecord::Base.connection.execute <<-SQL
@@ -131,7 +131,7 @@ describe CsvFastImporter do
     end
   end
 
-  describe 'with database column with special character' do
+  describe 'with special character in database column' do
 
     before do
       # TODO Execute multiple SQL queries with one statement (MySQL)
