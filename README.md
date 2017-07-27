@@ -40,14 +40,14 @@ class:
 ```ruby
 require 'csv_fast_importer'
 
-file = File.new '/path/to/customers.csv'
+file = File.new '/path/to/knights.csv'
 imported_lines_number = CsvFastImporter.import file
 
 puts imported_lines_number
 ```
 
-Under the hood, CSV Fast Importer deletes data from the `customers` table and
-imports those from `customers.csv` by mapping columns' names to table's fields.
+Under the hood, CSV Fast Importer deletes data from the `knights` table and
+imports those from `knights.csv` by mapping columns' names to table's fields.
 Note: mapping is case insensitive so database fields' names must be lowercase.
 For instance, a `FIRSTNAME` CSV column will be mapped to the `firstname` field.
 
@@ -79,29 +79,29 @@ CsvFastImporter.import file, col_sep: '|'
 
 By default, CSV Fast Importer computes the database table's name by taking the
 `basename` of the imported file. For instance, considering the imported file
-`/path/to/customers.csv`, the table's name will be `customers`. To bypass
+`/path/to/knights.csv`, the table's name will be `knights`. To bypass
 this default behaviour, specify the `destination` option:
 
 ```ruby
 file = File.new '/path/to/clients.csv'
-CsvFastImporter.import file, destination: 'customers'
+CsvFastImporter.import file, destination: 'knights'
 ```
 
 Finally, you can precise a custom mapping between CSV file's columns and
 database fields with the `mapping` option.
 
-Considering the following `customers.csv` file:
+Considering the following `knights.csv` file:
 
 ```csv
-FIRSTNAME;LASTNAME;CUSTOMER_EMAIL
-John;Doe;john@doe.com
-Jane;Doe;jane@doe.com
+NAME;KNIGHT_EMAIL
+Perceval;perceval@logre.cel
+Lancelot;lancelot@logre.cel
 ```
 
-To map the `CUSTOMER_EMAIL` column to the `email` database field:
+To map the `KNIGHT_EMAIL` column to the `email` database field:
 
 ```ruby
-CsvFastImporter.import file, mapping: { email: :customer_email }
+CsvFastImporter.import file, mapping: { email: :knight_email }
 ```
 
 ## How to contribute?
@@ -157,7 +157,6 @@ In few words:
 
 ## Roadmap
 
-- [ ] Tests + README : change customer/kaamelott_test by knights
 - [ ] Move classes in dedicated module (to prevent collisions in target application)
 - [ ] Document supported database (#29)
 - [ ] Code Review
