@@ -1,6 +1,8 @@
 require 'active_record'
 
 module CsvFastImporter
+
+  # Provide access to database driver/adapter
   class ConnectionHelper
 
     def self.adapter_name

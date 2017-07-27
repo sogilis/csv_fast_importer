@@ -2,6 +2,8 @@ require_relative './connection_helper'
 require_relative './database_factory'
 
 module CsvFastImporter
+
+  # Responsible for the main process
   class Import
 
     def initialize(configuration)

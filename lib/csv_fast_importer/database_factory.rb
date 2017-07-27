@@ -2,6 +2,8 @@ require_relative './database/mysql'
 require_relative './database/postgres'
 
 module CsvFastImporter
+
+  # Build corresponding CsvFastImporter database implementation based on a given adapter (fetched from ConnectionHelper)
   module DatabaseFactory
     DATABASES = { postgresql: CsvFastImporter::Database::Postgres,
                   mysql2: CsvFastImporter::Database::Mysql

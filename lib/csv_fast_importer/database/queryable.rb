@@ -1,5 +1,8 @@
 module CsvFastImporter
   module Database
+
+    # Include this module on a custom database implementation to enable commons query methods
+    # Do not forget to call .identifier_quote_character after that
     module Queryable
 
       module ClassMethods
