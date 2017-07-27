@@ -157,12 +157,12 @@ In few words:
 
 ## Roadmap
 
-- [ ] Document supported database (#29)
 - [ ] Code Review
 - [ ] Publish gem (#30)
+- [ ] Support custom enclosing field (ex: `"`)
+- [ ] Support custom line serparator (ex: \r\n for windows file)
 - [ ] MySQL: support encoding parameter. See https://dev.mysql.com/doc/refman/5.5/en/charset-charsets.html
 - [ ] MySQL: support transaction parameter
 - [ ] MySQL: support row_index_column parameter
-- [ ] MySQL: Run multiple SQL queries in single statement
-- [ ] Specify supported database versions (MySQL & PostgreSQL)
+- [ ] MySQL: run multiple SQL queries in single statement
 - [ ] Refactor tests (with should-> must / should -> expect / subject...)

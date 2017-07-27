@@ -11,10 +11,6 @@ module CsvFastImporter
 
       def bulk_import(file, table, columns, row_index_column: nil, column_separator:, encoding:)
         columns_list_query = columns.map { |column| identify(column) }.join(',')
-        # TODO Test without enclosed field
-        # TODO Test with \r\n and \n endline
-        # TODO handle nulls
-        # TODO Add row_inex column
         execute <<-SQL
             LOAD DATA LOCAL INFILE '#{File.expand_path(file)}'
             INTO TABLE #{identify(table)}
