@@ -3,10 +3,10 @@ require_relative 'support/test_helper'
 require_relative 'support/csv_writer'
 
 describe CsvFastImporter do
-  include_context 'test_kaamelott table with columns row_index, id and label'
+  include_context 'knights table with columns row_index, id and name'
 
   describe 'with MySQL database', skip_postgres: true do
-    let(:file) { write_file [ %w(id label), %w(10 kadoc) ] }
+    let(:file) { write_file [ %w(id name), %w(10 Karadoc) ] }
     let(:parameters) { nil }
     subject { CsvFastImporter.import file, parameters }
 
