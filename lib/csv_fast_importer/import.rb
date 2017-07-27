@@ -2,7 +2,7 @@ require_relative './connection_helper'
 require_relative './database_factory'
 
 module CsvFastImporter
-  class Importation
+  class Import
 
     def initialize(configuration)
       @configuration = configuration
