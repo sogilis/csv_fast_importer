@@ -6,7 +6,7 @@ end
 
 module Benchmark
 
-  TOTAL_ROW_COUNT = 1_000
+  TOTAL_ROW_COUNT = 10_000
 
   def self.run
     puts "Start benchmark with a #{TOTAL_ROW_COUNT} lines file."
@@ -26,7 +26,10 @@ module Benchmark
         raise "Unknown database type: #{test_db.type}"
     end
 
-    # active_record_importer : no more maintained
+    # Following gem is not study here because of lack of maintenance:
+    #   - active_record_importer
+    #   - ar_import
+
     # Public data: http://ouvert.canada.ca/data/fr/dataset/40e01423-7728-429c-ac9d-2954385ccdfb
 
     puts "CSV file generation..."
@@ -69,8 +72,10 @@ module Benchmark
   def self.csv_and_native_active_record_create(file)
     csv = CSV.parse(File.read(file), headers: true, col_sep: ';')
     time do
-      csv.each do |row|
-        Knight.create!(row.to_hash)
+      Knight.transaction do
+        csv.each do |row|
+          Knight.create!(row.to_hash)
+        end
       end
     end
   end
@@ -78,8 +83,10 @@ module Benchmark
   # Variable : CSV chunk size
   def self.smarter_csv_and_csv_and_native_active_record_create(file)
     require 'smarter_csv'
-    SmarterCSV.process(file.path, chunk_size: 100, col_sep: ';') do |knights_attributes|
-      Knight.create! knights_attributes
+    SmarterCSV.process(file.path, chunk_size: 1000, col_sep: ';') do |knights_attributes|
+      Knight.transaction do
+        Knight.create! knights_attributes
+      end
     end
   end
 
@@ -87,7 +94,7 @@ module Benchmark
   def self.smarter_csv_and_activerecord_import(file)
     require 'smarter_csv'
     require 'activerecord-import/base'
-    SmarterCSV.process(file.path, chunk_size: 100, col_sep: ';') do |knights_attributes|
+    SmarterCSV.process(file.path, chunk_size: 1000, col_sep: ';') do |knights_attributes|
       knights = knights_attributes.map { |attributes| Knight.new attributes }
       Knight.import knights_attributes.first.keys, knights, batch_size: 10, validate: false
     end
@@ -96,7 +103,7 @@ module Benchmark
   def self.bulk_insert(file)
     require 'smarter_csv'
     require 'bulk_insert'
-    SmarterCSV.process(file.path, chunk_size: 100, col_sep: ';') do |knights_attributes|
+    SmarterCSV.process(file.path, chunk_size: 1000, col_sep: ';') do |knights_attributes|
       Knight.bulk_insert values: knights_attributes
     end
   end
