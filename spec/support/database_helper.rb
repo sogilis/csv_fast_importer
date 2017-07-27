@@ -17,12 +17,12 @@ ActiveRecord::Schema.define do
 
 end
 
-%w(database_factory.rb connection_helper.rb).each do |file|
+%w(database_factory.rb database_connection.rb).each do |file|
   require ROOT_DIR.join('lib/csv_fast_importer').join(file)
 end
 
 module DatabaseHelper
   def db
-    @db ||= CsvFastImporter::DatabaseFactory.build(CsvFastImporter::ConnectionHelper.adapter_name)
+    @db ||= CsvFastImporter::DatabaseFactory.build(CsvFastImporter::DatabaseConnection.adapter_name)
   end
 end

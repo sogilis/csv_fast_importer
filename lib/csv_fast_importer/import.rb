@@ -1,4 +1,4 @@
-require_relative './connection_helper'
+require_relative './database_connection'
 require_relative './database_factory'
 
 module CsvFastImporter
@@ -11,7 +11,7 @@ module CsvFastImporter
     end
 
     def run
-      @db = CsvFastImporter::DatabaseFactory.build(CsvFastImporter::ConnectionHelper.adapter_name)
+      @db = CsvFastImporter::DatabaseFactory.build(CsvFastImporter::DatabaseConnection.adapter_name)
       @db.verify_compatibility @configuration
 
       row_index = 0

@@ -1,3 +1,5 @@
+require 'csv_fast_importer/database_connection'
+
 module CsvFastImporter
   module Database
 
@@ -23,19 +25,19 @@ module CsvFastImporter
       end
 
       def connection
-        ConnectionHelper.base_connection.raw_connection
+        DatabaseConnection.base_connection.raw_connection
       end
 
       def execute(query)
-        ConnectionHelper.base_connection.execute query
+        DatabaseConnection.base_connection.execute query
       end
 
       def query(query)
-        ConnectionHelper.base_connection.select_value query
+        DatabaseConnection.base_connection.select_value query
       end
 
       def transaction
-        ConnectionHelper.base_connection.transaction do
+        DatabaseConnection.base_connection.transaction do
           yield
         end
       end
