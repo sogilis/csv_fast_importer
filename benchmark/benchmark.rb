@@ -1,6 +1,12 @@
+require 'active_record'
+
+class Knight < ActiveRecord::Base
+end
+
+
 module Benchmark
 
-  TOTAL_ROW_COUNT = 1_000_000
+  TOTAL_ROW_COUNT = 1_000
 
   def self.run
     puts "Start benchmark with a #{TOTAL_ROW_COUNT} lines file."
@@ -30,14 +36,28 @@ module Benchmark
 
     puts "Run CsvFastImporter..."
     csv_fast_importer_time = time { CsvFastImporter.import file }
+    native_active_record_create_time = native_active_record_create(file)
 
+    puts ""
+    puts "Results:"
     puts "CsvFastImporter: #{csv_fast_importer_time}s"
+    puts "Native ActiveRecord #create!: #{native_active_record_create_time}s"
+    puts ""
     puts "Benchmark finished."
   end
 
   def self.time
-    beginning_time = Time.now
+    start_time = Time.now
     yield
-    Time.now - beginning_time
+    Time.now - start_time
+  end
+
+  def self.native_active_record_create(file)
+    csv = CSV.parse(File.read(file), headers: true, col_sep: ';')
+    time do
+      csv.each do |row|
+        Knight.create!(row.to_hash)
+      end
+    end
   end
 end
