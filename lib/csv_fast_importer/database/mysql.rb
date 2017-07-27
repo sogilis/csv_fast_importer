@@ -2,9 +2,7 @@ require_relative './queryable'
 
 module CsvFastImporter
   module Database
-    class Mysql
-      include CsvFastImporter::Database::Queryable
-
+    class Mysql < Queryable
       identifier_quote_character '`'
 
       def verify_compatibility(configuration)

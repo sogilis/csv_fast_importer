@@ -12,7 +12,7 @@ module CsvFastImporter
 
     def self.build
       adapter = CsvFastImporter::DatabaseConnection.adapter_name
-      return DATABASES[adapter].new if DATABASES.has_key?(adapter)
+      return DATABASES[adapter].new(CsvFastImporter::DatabaseConnection.base_connection) if DATABASES.has_key?(adapter)
       raise "Database adapter #{adapter} not supported by CsvFastImporter. Only #{DATABASES.keys.join(", ")} are supported"
     end
   end

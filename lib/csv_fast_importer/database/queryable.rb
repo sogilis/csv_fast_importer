@@ -1,23 +1,19 @@
-require 'csv_fast_importer/database_connection'
-
 module CsvFastImporter
   module Database
 
-    # Include this module on a custom database implementation to enable commons query methods
-    # Do not forget to call .identifier_quote_character after that
-    module Queryable
+    # Inherit from this class to create new custom database implementation
+    # Do not forget to call .identifier_quote_character
+    class Queryable
 
-      module ClassMethods
-        # Character used around identifiers (table or column name) to handle special characters
-        def identifier_quote_character(character)
-          define_method "identify" do |identifier|
-            character + identifier + character
-          end
-        end
+      def initialize(connection)
+        @connection = connection
       end
 
-      def self.included(base)
-        base.extend ClassMethods
+      # Character used around identifiers (table or column name) to handle special characters
+      def self.identifier_quote_character(character)
+        define_method "identify" do |identifier|
+          character + identifier + character
+        end
       end
 
       def identify(table_or_column)
@@ -25,19 +21,19 @@ module CsvFastImporter
       end
 
       def connection
-        DatabaseConnection.base_connection.raw_connection
+        @connection.raw_connection
       end
 
       def execute(query)
-        DatabaseConnection.base_connection.execute query
+        @connection.execute query
       end
 
       def query(query)
-        DatabaseConnection.base_connection.select_value query
+        @connection.select_value query
       end
 
       def transaction
-        DatabaseConnection.base_connection.transaction do
+        @connection.transaction do
           yield
         end
       end

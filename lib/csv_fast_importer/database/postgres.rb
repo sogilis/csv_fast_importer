@@ -2,9 +2,7 @@ require_relative './queryable'
 
 module CsvFastImporter
   module Database
-    class Postgres
-      include CsvFastImporter::Database::Queryable
-
+    class Postgres < Queryable
       identifier_quote_character '"'
 
       def verify_compatibility(configuration)
