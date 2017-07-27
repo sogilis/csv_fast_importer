@@ -37,3 +37,8 @@ namespace :test do
 
   end
 end
+
+task :bench do
+  require_relative 'benchmark/benchmark'
+  Benchmark.run
+end
