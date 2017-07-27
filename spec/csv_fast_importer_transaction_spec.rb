@@ -5,7 +5,21 @@ require_relative 'support/csv_writer'
 describe CsvFastImporter do
   include_context 'test_kaamelott table with columns row_index, id and label'
 
-  describe 'when importation fail' do
+  describe 'with MySQL database', skip_postgres: true do
+    let(:file) { write_file [ %w(id label), %w(10 kadoc) ] }
+    let(:parameters) { nil }
+    subject { CsvFastImporter.import file, parameters }
+
+    describe 'with enabled transaction' do
+      let(:parameters) { { transaction: :enabled } }
+
+      it 'throws exception' do
+        lambda { subject }.should raise_error('Transactional not supported with MySQL database')
+      end
+    end
+  end
+
+  describe 'when importation fail', skip_mysql: true do
     before do
       insert_one_row
     end

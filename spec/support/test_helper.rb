@@ -1,10 +1,13 @@
 require 'codacy-coverage'
 Codacy::Reporter.start
 
-require 'active_record'
 require 'pathname'
+ROOT_DIR = Pathname.new(File.dirname(__FILE__)).join("../..")
 
-test_dir = Pathname.new File.dirname(__FILE__)
+%w(database_helper spec_helper).each do |file|
+  require ROOT_DIR.join('spec/support').join(file)
+end
 
-%w(database_helper spec_helper database_helper).each { |file| require test_dir.join(file) }
-Dir[File.dirname(__FILE__) + "/../context/**/*.rb"].each {|f| require f }
+Dir[ROOT_DIR.join("spec/context/**/*.rb")].each { |f| require f }
+
+

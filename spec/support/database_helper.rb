@@ -1,5 +1,5 @@
-ActiveRecord::Base.configurations["test"] = YAML.load_file('spec/config/database.yml')
-ActiveRecord::Base.establish_connection :test
+require ROOT_DIR.join('spec/config/database.rb')
+establish_connection
 
 ActiveRecord::Schema.define do
 
@@ -17,12 +17,10 @@ ActiveRecord::Schema.define do
 
 end
 
-module DatabaseHelper
-  def sql_select(sql_query)
-    ActiveRecord::Base.connection.select_value sql_query
-  end
+require ROOT_DIR.join('lib/database_factory.rb')
 
-  def sql_execute(sql_query)
-    ActiveRecord::Base.connection.execute sql_query
+module DatabaseHelper
+  def db
+    @db ||= DatabaseFactory.build(ConnectionHelper.adapter_name)
   end
 end
