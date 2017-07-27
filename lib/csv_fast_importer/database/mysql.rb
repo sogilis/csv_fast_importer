@@ -19,7 +19,7 @@ module CsvFastImporter
             LOAD DATA LOCAL INFILE '#{File.expand_path(file)}'
             INTO TABLE #{identify(table)}
             CHARACTER SET UTF8
-            FIELDS TERMINATED BY ';' OPTIONALLY ENCLOSED BY '"'
+            FIELDS TERMINATED BY '#{column_separator}' OPTIONALLY ENCLOSED BY '"'
             LINES TERMINATED BY '\\n'
             IGNORE 1 LINES
             (#{columns_list_query})

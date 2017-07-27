@@ -15,6 +15,10 @@ describe CsvFastImporter do
     it 'a new line must be inserted' do
       row_count.should eql 1
     end
+
+    it 'fields are correctly separated' do
+      db.query('SELECT name FROM knights').to_s.should eql 'Karadoc'
+    end
   end
 
   describe 'with custom file encoding', skip_mysql: true do
