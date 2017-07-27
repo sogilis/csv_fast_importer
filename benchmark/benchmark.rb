@@ -26,6 +26,7 @@ module Benchmark
         raise "Unknown database type: #{test_db.type}"
     end
 
+    # active_record_importer : no more maintained
     # Public data: http://ouvert.canada.ca/data/fr/dataset/40e01423-7728-429c-ac9d-2954385ccdfb
 
     puts "CSV file generation..."
@@ -37,12 +38,16 @@ module Benchmark
     subjects = {
       'CsvFastImporter' => :csv_fast_importer,
       'CSV + native ActiveRecord #create!' => :csv_and_native_active_record_create,
-      'smarted_csv + native ActiveRecord #create!' => :smarter_csv_and_csv_and_native_active_record_create
+      'smarted_csv + native ActiveRecord #create!' => :smarter_csv_and_csv_and_native_active_record_create,
+      'smarted_csv + activerecord-import' => :smarter_csv_and_activerecord_import
     }
+    # TODO Upsert: https://github.com/seamusabshere/upsert
+    # TODO native AR#create! with transaction
 
     puts ""
     puts "Benchmarking..."
     subjects.each do |label, method|
+      db.execute 'TRUNCATE TABLE knights'
       duration = time { send(method, file) }
       puts "#{label}: #{duration}s"
     end
@@ -69,11 +74,21 @@ module Benchmark
     end
   end
 
-  # Variable : chunk size
+  # Variable : CSV chunk size
   def self.smarter_csv_and_csv_and_native_active_record_create(file)
     require 'smarter_csv'
-    SmarterCSV.process(file.path, chunk_size: 100, col_sep: ';') do |knights|
-      Knight.create! knights
+    SmarterCSV.process(file.path, chunk_size: 100, col_sep: ';') do |knights_attributes|
+      Knight.create! knights_attributes
+    end
+  end
+
+  # Variable : CSV chunk size + INSERT chunk size
+  def self.smarter_csv_and_activerecord_import(file)
+    require 'smarter_csv'
+    require 'activerecord-import/base'
+    SmarterCSV.process(file.path, chunk_size: 100, col_sep: ';') do |knights_attributes|
+      knights = knights_attributes.map { |attributes| Knight.new attributes }
+      Knight.import knights_attributes.first.keys, knights, batch_size: 10, validate: false
     end
   end
 end

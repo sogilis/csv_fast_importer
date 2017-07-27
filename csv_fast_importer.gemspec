@@ -37,6 +37,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "codacy-coverage"
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "smarter_csv"
+  spec.add_development_dependency "activerecord-import"
 
   spec.add_runtime_dependency "activerecord", [">= 3.0"]
 end
