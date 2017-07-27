@@ -1,4 +1,7 @@
 module CsvFastImporter
+
+  # Gather all import configurations based on given file and additional parameters.
+  # This class is also responsible for default configuration.
   class Configuration
 
     attr_accessor :file

@@ -1,16 +1,16 @@
-require 'active_record'
-require 'csv_fast_importer/connection_helper'
-require 'csv_fast_importer/database_factory'
+require_relative './database_factory'
 
 module CsvFastImporter
-  class Importation
+
+  # Responsible for the main process
+  class Import
 
     def initialize(configuration)
       @configuration = configuration
     end
 
     def run
-      @db = CsvFastImporter::DatabaseFactory.build(CsvFastImporter::ConnectionHelper.adapter_name)
+      @db = CsvFastImporter::DatabaseFactory.build
       @db.verify_compatibility @configuration
 
       row_index = 0

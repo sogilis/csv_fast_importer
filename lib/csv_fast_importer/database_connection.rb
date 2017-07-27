@@ -1,5 +1,9 @@
+require 'active_record'
+
 module CsvFastImporter
-  class ConnectionHelper
+
+  # Provide access to database driver/adapter
+  class DatabaseConnection
 
     def self.adapter_name
       @adapter_name ||= base_connection.adapter_name
