@@ -157,7 +157,6 @@ In few words:
 
 ## Roadmap
 
-- [ ] Tests + README : change customer/kaamelott_test by knights
 - [ ] Move classes in dedicated module (to prevent collisions in target application)
 - [ ] Document supported database (#29)
 - [ ] Code Review
