@@ -1,10 +1,10 @@
-require 'csv_fast_importer/mysql_helper'
-require 'csv_fast_importer/postgres_helper'
+require_relative './database/mysql'
+require_relative './database/postgres'
 
 module CsvFastImporter
   module DatabaseFactory
-    DATABASES = { postgresql: CsvFastImporter::PostgresHelper,
-                  mysql2: CsvFastImporter::MysqlHelper
+    DATABASES = { postgresql: CsvFastImporter::Database::Postgres,
+                  mysql2: CsvFastImporter::Database::Mysql
                 }
 
     def self.build(adapter)

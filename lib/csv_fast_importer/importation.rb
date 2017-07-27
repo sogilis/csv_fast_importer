@@ -1,6 +1,5 @@
-require 'active_record'
-require 'csv_fast_importer/connection_helper'
-require 'csv_fast_importer/database_factory'
+require_relative './connection_helper'
+require_relative './database_factory'
 
 module CsvFastImporter
   class Importation
