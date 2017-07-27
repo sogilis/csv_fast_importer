@@ -1,16 +1,18 @@
+require ROOT_DIR.join('spec/support/database_helper')
+
 shared_context 'knights table with columns row_index, id and name' do
   include DatabaseHelper
 
   before do
     db.execute 'DROP TABLE IF EXISTS knights'
     # TODO Replace by database_helper.rb / Schema.define
-    case DB_TYPE
+    case TEST_DATABASE.type
       when :mysql
         db.execute 'CREATE TABLE knights ( row_index INT NULL, id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, name varchar(32) NOT NULL )'
       when :postgres
         db.execute 'CREATE TABLE knights ( row_index int4 NULL, id serial NOT NULL, name varchar(32) NOT NULL )'
       else
-        raise "Unknown database type: #{DB_TYPE}"
+        raise "Unknown database type: #{TEST_DATABASE.type}"
     end
   end
 

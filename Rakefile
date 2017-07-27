@@ -6,28 +6,33 @@ namespace :test do
     desc "Create test database"
     task :create do
 
-      require './spec/config/database.rb'
+      require_relative './spec/config/test_database.rb'
 
-      case DB_TYPE
+      db = TestDatabase.new
+      case db.type
         when :postgres
           require 'pg'
-          establish_connection 'postgres'
-          ActiveRecord::Base.connection.execute "CREATE DATABASE #{DATABASE_NAME}"
+          db.connect 'postgres'
+          ActiveRecord::Base.connection.execute "CREATE DATABASE #{db.name}"
 
         when :mysql
           require 'mysql2'
-          MYSQL_DB_CREATION_CONFIG = DATABASE_CONFIG.merge(database: nil, username: 'root', password: ENV['DB_ROOT_PASSWORD'], flags: Mysql2::Client::MULTI_STATEMENTS)
-          client = Mysql2::Client.new(MYSQL_DB_CREATION_CONFIG)
+          client_config = db.configuration
+                            .merge(database: nil,
+                                   username: 'root',
+                                   password: ENV['DB_ROOT_PASSWORD'],
+                                   flags: Mysql2::Client::MULTI_STATEMENTS)
+          client = Mysql2::Client.new(client_config)
           client.query <<-SQL
-            CREATE DATABASE #{DATABASE_NAME};
-            GRANT ALL ON #{DATABASE_NAME}.* TO '#{DATABASE_CONFIG['username']}'@'#{DATABASE_CONFIG['host']}';
+            CREATE DATABASE #{db.name};
+            GRANT ALL ON #{db.name}.* TO '#{db.configuration['username']}'@'#{db.configuration['host']}';
             FLUSH PRIVILEGES;
           SQL
         else
-          raise "Unknown database type: #{DB_TYPE}"
+          raise "Unknown database type: #{db.type}"
       end
 
-      puts "Test database \"#{DATABASE_NAME}\" created."
+      puts "Test database \"#{db.name}\" created."
     end
 
   end

@@ -1,6 +1,5 @@
 require 'pathname'
 require 'csv'
-#require 'tempfile'
 
 class CSVWriter
 
