@@ -24,6 +24,8 @@ GEM
       tzinfo (~> 1.1)
     arel (6.0.3)
     builder (3.2.2)
+    bulk_insert (1.5.0)
+      activerecord (>= 4.1.0)
     codacy-coverage (0.2.3)
       rest-client (~> 1.8)
       simplecov (~> 0.10.0)
@@ -76,6 +78,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-import
+  bulk_insert
   bundler (~> 1.10)
   codacy-coverage
   csv_fast_importer!

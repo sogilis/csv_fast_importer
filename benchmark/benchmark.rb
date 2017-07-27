@@ -39,7 +39,8 @@ module Benchmark
       'CsvFastImporter' => :csv_fast_importer,
       'CSV + native ActiveRecord #create!' => :csv_and_native_active_record_create,
       'smarted_csv + native ActiveRecord #create!' => :smarter_csv_and_csv_and_native_active_record_create,
-      'smarted_csv + activerecord-import' => :smarter_csv_and_activerecord_import
+      'smarted_csv + activerecord-import' => :smarter_csv_and_activerecord_import,
+      'bulk_insert' => :bulk_insert
     }
     # TODO Upsert: https://github.com/seamusabshere/upsert
     # TODO native AR#create! with transaction
@@ -89,6 +90,14 @@ module Benchmark
     SmarterCSV.process(file.path, chunk_size: 100, col_sep: ';') do |knights_attributes|
       knights = knights_attributes.map { |attributes| Knight.new attributes }
       Knight.import knights_attributes.first.keys, knights, batch_size: 10, validate: false
+    end
+  end
+
+  def self.bulk_insert(file)
+    require 'smarter_csv'
+    require 'bulk_insert'
+    SmarterCSV.process(file.path, chunk_size: 100, col_sep: ';') do |knights_attributes|
+      Knight.bulk_insert values: knights_attributes
     end
   end
 end
