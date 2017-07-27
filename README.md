@@ -2,34 +2,39 @@
 
 # CSV Fast Importer
 
-A gem to import CSV files' content into a PostgreSQL database. It is based on
-the [Postgre `COPY` command](https://wiki.postgresql.org/wiki/COPY) which is
-designed to be as faster as possible.
+A gem to import CSV files' content into a PostgreSQL or MySQL database. It is respectively based on [PostgreSQL `COPY`](https://wiki.postgresql.org/wiki/COPY) and [MySQL `LOAD DATA INFILE`](https://dev.mysql.com/doc/refman/5.7/en/load-data.html) which are designed to be as fast as possible.
 
 ## Requirements
 
 - Rails (ActiveRecord in fact)
 - PostgreSQL or MySQL
-- MySQL only: enable `local_infile` parameter (add `local_infile: true` to your database config file `databse.yml`)
 
 ## Limitations
+
+- Custom enclosing field (ex: `"`) is not supported yet
+- Custom line serparator (ex: `\r\n` for windows file) is not supported yet
 - MySQL: encoding is not supported yet
 - MySQL: transaction is not supported yet
 - MySQL: row_index is not supported yet
 
 ## Installation
 
-Add the dependency to your Gemfile and execute `bundle install`:
+Add the dependency to your Gemfile:
 
 ```gemfile
 gem 'csv_fast_importer`
 ```
+
+Run `bundle install`.
 
 You can install the gem by yourself too:
 
 ```sh
 $ gem install csv_fast_importer
 ```
+
+**MySQL only** :warning: enable `local_infile` for both [client](https://dev.mysql.com/doc/refman/5.7/en/source-configuration-options.html#option_cmake_enabled_local_infile) and [server](https://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html#sysvar_local_infile). In Rails application, juste add `local_infile: true` to your database config file `databse.yml` to configure the database client. See [Security Issues with LOAD DATA LOCAL](https://dev.mysql.com/doc/refman/5.7/en/load-data-local.html) for more details.
+
 
 ## Usage
 
@@ -48,23 +53,23 @@ puts imported_lines_number
 
 Under the hood, CSV Fast Importer deletes data from the `knights` table and
 imports those from `knights.csv` by mapping columns' names to table's fields.
-Note: mapping is case insensitive so database fields' names must be lowercase.
+Note: mapping is case insensitive so **database fields' names must be lowercase**.
 For instance, a `FIRSTNAME` CSV column will be mapped to the `firstname` field.
 
 ### Options
 
 | Option key | Purpose | Default value |
 | ------------ | ------------- | ------------- |
-| *encoding* | File encoding. PostgreSQL only| `'UTF-8'` |
+| *encoding* | File encoding. *PostgreSQL only*| `'UTF-8'` |
 | *col_sep* | Column separator in file | `';'` |
 | *destination* | Destination table | given base filename (without extension) |
 | *mapping* | Column mapping | `{}` |
-| *row_index_column* | Column name where inserting file row index (not used when `nil`). PostgreSQL only | `nil` |
-| *transaction* | Execute DELETE and INSERT in same transaction. PostgreSQL only | `:enabled` |
+| *row_index_column* | Column name where inserting file row index (not used when `nil`). *PostgreSQL only* | `nil` |
+| *transaction* | Execute DELETE and INSERT in same transaction. *PostgreSQL only* | `:enabled` |
 | *deletion* | Row deletion method (`:delete` for SQL DELETE, `:truncate` for SQL TRUNCATE or `:none` for no deletion before import) | `:delete` |
 
 Your CSV file should be encoding in UTF-8 but you can specify another encoding
-with the `encoding` option (PostgreSQL only).
+with the `encoding` option (*PostgreSQL only*).
 
 ```ruby
 CsvFastImporter.import file, encoding: 'ISO-8859-1'
