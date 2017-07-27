@@ -1,12 +1,12 @@
 require 'csv_fast_importer/version'
-require 'configuration'
-require 'importation'
+require 'csv_fast_importer/configuration'
+require 'csv_fast_importer/importation'
 
-class CsvFastImporter
+module CsvFastImporter
 
   def self.import(file, parameters = {})
-    configuration = Configuration.new file, parameters
-    Importation.new(configuration).run
+    configuration = CsvFastImporter::Configuration.new file, parameters
+    CsvFastImporter::Importation.new(configuration).run
   end
 
 end

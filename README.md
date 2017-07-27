@@ -157,7 +157,6 @@ In few words:
 
 ## Roadmap
 
-- [ ] Move classes in dedicated module (to prevent collisions in target application)
 - [ ] Document supported database (#29)
 - [ ] Code Review
 - [ ] Publish gem (#30)
