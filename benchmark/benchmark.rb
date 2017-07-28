@@ -48,19 +48,15 @@ module Benchmark
     #   - active_record_importer
     #   - ar_import
 
-    # TODO Add following strategies in benchmark
-    #   - data_miner: https://github.com/seamusabshere/data_miner
-    #   - ferry: https://github.com/cmu-is-projects/ferry
-
     puts "Running benchmark..."
     strategies.each do |strategy_label, method|
       db.execute 'TRUNCATE TABLE datasets'
+      printf "%-50s: ", strategy_label
+
       duration = bench { send(method, file) }
-      if Dataset.count < line_count - 1 # Header
-        puts "- #{strategy_label}: #{duration}s (file partially imported)"
-      else
-        puts "- #{strategy_label}: #{duration}s"
-      end
+
+      additionnal_info = '(file partially imported)' if Dataset.count < line_count - 1 # Header
+      printf "%ss %s\n", duration, additionnal_info
     end
     puts
     puts "Benchmark finished."
@@ -159,7 +155,7 @@ module Benchmark
   def self.upsert(file)
     require 'csv'
     require 'upsert'
-    Upsert.logger.level = Logger::INFO
+    Upsert.logger.level = Logger::ERROR
     Upsert.batch(Dataset.connection, Dataset.table_name) do |upsert|
       CSV.foreach(file, headers: true) do |row|
         upsert.row(row.to_hash)
