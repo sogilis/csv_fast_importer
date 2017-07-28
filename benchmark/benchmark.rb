@@ -3,6 +3,13 @@ require 'active_record'
 class Dataset < ActiveRecord::Base
 end
 
+require 'csv-importer'
+class DatasetImporter
+  include CSVImporter
+
+  model Dataset
+end
+
 module Benchmark
 
   def self.database_connect
@@ -25,15 +32,14 @@ module Benchmark
       'SmarterCSV + ActiveRecord .create' => :smarter_csv_and_csv_and_native_active_record_create,
       'SmarterCSV + activerecord-import' => :smarter_csv_and_activerecord_import,
       'bulk_insert' => :bulk_insert,
-      'CSV.foreach + upsert' => :upsert
+      'CSV.foreach + upsert' => :upsert,
+      'CSVImporter' => :csv_importer
     }
     # Following gem is not studied here because of lack of maintenance:
     #   - active_record_importer
     #   - ar_import
 
     # TODO Add following strategies in benchmark
-    #   - native AR#create! with transaction
-    #   - CSVImporter: https://github.com/pcreux/csv-importer
     #   - active_importer: https://github.com/continuum/active_importer
     #   - data_miner: https://github.com/seamusabshere/data_miner
     #   - ferry: https://github.com/cmu-is-projects/ferry
@@ -42,8 +48,12 @@ module Benchmark
     puts "Benchmarking..."
     strategies.each do |strategy_label, method|
       db.execute 'TRUNCATE TABLE datasets'
-      duration = bench { send(method, file, db) }
-      puts "#{strategy_label}: #{duration}s"
+      duration = bench { send(method, file) }
+      if Dataset.count < line_count - 1 # Header
+        puts "#{strategy_label}: #{duration}s (file partially imported)"
+      else
+        puts "#{strategy_label}: #{duration}s"
+      end
     end
     puts
     puts "Benchmark finished."
@@ -141,5 +151,9 @@ module Benchmark
         upsert.row(row.to_hash)
       end
     end
+  end
+
+  def self.csv_importer(file)
+    DatasetImporter.new(path: file.path).run!
   end
 end

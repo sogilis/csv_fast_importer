@@ -23,19 +23,31 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     arel (6.0.3)
+    axiom-types (0.1.1)
+      descendants_tracker (~> 0.0.4)
+      ice_nine (~> 0.11.0)
+      thread_safe (~> 0.3, >= 0.3.1)
     builder (3.2.2)
     bulk_insert (1.5.0)
       activerecord (>= 4.1.0)
     codacy-coverage (0.2.3)
       rest-client (~> 1.8)
       simplecov (~> 0.10.0)
+    coercible (1.0.0)
+      descendants_tracker (~> 0.0.1)
+    csv-importer (0.3.2)
+      virtus
+    descendants_tracker (0.0.4)
+      thread_safe (~> 0.3, >= 0.3.1)
     diff-lcs (1.2.5)
     docile (1.1.5)
     domain_name (0.5.20160216)
       unf (>= 0.0.5, < 1.0.0)
+    equalizer (0.0.11)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     i18n (0.7.0)
+    ice_nine (0.11.2)
     json (1.8.3)
     mime-types (2.99.1)
     minitest (5.8.3)
@@ -73,6 +85,11 @@ GEM
       unf_ext
     unf_ext (0.0.7.2)
     upsert (2.2.1)
+    virtus (1.0.5)
+      axiom-types (~> 0.1)
+      coercible (~> 1.0)
+      descendants_tracker (~> 0.0, >= 0.0.3)
+      equalizer (~> 0.0, >= 0.0.9)
 
 PLATFORMS
   ruby
@@ -82,6 +99,7 @@ DEPENDENCIES
   bulk_insert
   bundler (~> 1.10)
   codacy-coverage
+  csv-importer
   csv_fast_importer!
   mysql2 (>= 0.3.10)
   pg (>= 0.18.4)
