@@ -6,15 +6,14 @@ A gem to import CSV files' content into a PostgreSQL or MySQL database. It is re
 
 ## Why?
 
-CSV importation is a common task which can be done by more than 6 different gems, but none of them is able to import **1 million of lines in a few seconds** (see benchmark below). Here is why this gem was created.
+CSV importation is a common task which can be done by more than 6 different gems, but none of them is able to import **1 million of lines in a few seconds** (see benchmark below), hence the creation of this gem.
 
-Here is an indicative benchmark to compare available solutions (lower is better):
+Here is an indicative benchmark to compare available solutions. It represents the **duration (ms)** to import a **10 000 lines** csv file into a local PostgreSQL instance on a laptop running OSX (lower is better):
 
 ![Benchmark](benchmark/result.png?raw=true "Benchmark")
 
-Represents the **duration (ms)** to import a **10 000 lines** file in local PostgreSQL instance on OSX laptop.
-Like all benchmarks, some tuning can produce different results, but nevertheless, this chart gives a big picture.
-You can run this benchmark with `bundle exec rake bench`.
+Like all benchmarks, some tuning can produce different results, yet this chart gives a big picture.
+You can run this benchmark from your own with `bundle exec rake bench`.
 
 ## Requirements
 
