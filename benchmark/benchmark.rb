@@ -3,11 +3,18 @@ require 'active_record'
 class Dataset < ActiveRecord::Base
 end
 
+# Required by CsvImporter
 require 'csv-importer'
-class DatasetImporter
+class DatasetCSVImporter
   include CSVImporter
 
   model Dataset
+end
+
+# Required by ActiveImporter
+require 'active_importer'
+class DatasetActiveImporter < ActiveImporter::Base
+  imports Dataset
 end
 
 module Benchmark
@@ -33,14 +40,14 @@ module Benchmark
       'SmarterCSV + activerecord-import' => :smarter_csv_and_activerecord_import,
       'bulk_insert' => :bulk_insert,
       'CSV.foreach + upsert' => :upsert,
-      'CSVImporter' => :csv_importer
+      'CSVImporter' => :csv_importer,
+      'ActiveImporter' => :active_importer
     }
     # Following gem is not studied here because of lack of maintenance:
     #   - active_record_importer
     #   - ar_import
 
     # TODO Add following strategies in benchmark
-    #   - active_importer: https://github.com/continuum/active_importer
     #   - data_miner: https://github.com/seamusabshere/data_miner
     #   - ferry: https://github.com/cmu-is-projects/ferry
 
@@ -153,6 +160,10 @@ module Benchmark
   end
 
   def self.csv_importer(file)
-    DatasetImporter.new(path: file.path).run!
+    DatasetCSVImporter.new(path: file.path).run!
+  end
+
+  def self.active_importer(file)
+    DatasetActiveImporter.import file.path
   end
 end
