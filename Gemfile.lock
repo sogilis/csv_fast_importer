@@ -72,6 +72,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.2)
+    upsert (2.2.1)
 
 PLATFORMS
   ruby
@@ -87,6 +88,7 @@ DEPENDENCIES
   rake (~> 10.0)
   rspec
   smarter_csv
+  upsert
 
 BUNDLED WITH
    1.13.2

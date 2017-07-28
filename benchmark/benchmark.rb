@@ -24,14 +24,14 @@ module Benchmark
       'CSV.foreach + ActiveRecord .create' => :csv_foreach_plus_create,
       'SmarterCSV + ActiveRecord .create' => :smarter_csv_and_csv_and_native_active_record_create,
       'SmarterCSV + activerecord-import' => :smarter_csv_and_activerecord_import,
-      'bulk_insert' => :bulk_insert
+      'bulk_insert' => :bulk_insert,
+      'CSV.foreach + upsert' => :upsert
     }
     # Following gem is not studied here because of lack of maintenance:
     #   - active_record_importer
     #   - ar_import
 
     # TODO Add following strategies in benchmark
-    #   - Upsert: https://github.com/seamusabshere/upsert
     #   - native AR#create! with transaction
     #   - CSVImporter: https://github.com/pcreux/csv-importer
     #   - active_importer: https://github.com/continuum/active_importer
@@ -42,7 +42,7 @@ module Benchmark
     puts "Benchmarking..."
     strategies.each do |strategy_label, method|
       db.execute 'TRUNCATE TABLE datasets'
-      duration = bench { send(method, file) }
+      duration = bench { send(method, file, db) }
       puts "#{strategy_label}: #{duration}s"
     end
     puts
@@ -130,5 +130,16 @@ module Benchmark
     #     end
     #   end
     # end
+  end
+
+  def self.upsert(file)
+    require 'csv'
+    require 'upsert'
+    Upsert.logger.level = Logger::INFO
+    Upsert.batch(Dataset.connection, Dataset.table_name) do |upsert|
+      CSV.foreach(file, headers: true) do |row|
+        upsert.row(row.to_hash)
+      end
+    end
   end
 end

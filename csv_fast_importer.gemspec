@@ -41,6 +41,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "smarter_csv"
   spec.add_development_dependency "activerecord-import"
   spec.add_development_dependency "bulk_insert"
+  spec.add_development_dependency "upsert"
 
   spec.add_runtime_dependency "activerecord", [">= 3.0"]
 end
