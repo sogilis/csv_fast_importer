@@ -44,15 +44,14 @@ module Benchmark
     #   - data_miner: https://github.com/seamusabshere/data_miner
     #   - ferry: https://github.com/cmu-is-projects/ferry
 
-    puts
-    puts "Benchmarking..."
+    puts "Running benchmark..."
     strategies.each do |strategy_label, method|
       db.execute 'TRUNCATE TABLE datasets'
       duration = bench { send(method, file) }
       if Dataset.count < line_count - 1 # Header
-        puts "#{strategy_label}: #{duration}s (file partially imported)"
+        puts "- #{strategy_label}: #{duration}s (file partially imported)"
       else
-        puts "#{strategy_label}: #{duration}s"
+        puts "- #{strategy_label}: #{duration}s"
       end
     end
     puts
