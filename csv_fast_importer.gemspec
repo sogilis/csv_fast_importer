@@ -44,6 +44,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "upsert"
   spec.add_development_dependency "csv-importer"
   spec.add_development_dependency "active_importer"
+  spec.add_development_dependency "ferry"
 
   spec.add_runtime_dependency "activerecord", [">= 3.0"]
 end

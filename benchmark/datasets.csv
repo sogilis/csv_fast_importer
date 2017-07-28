@@ -1,4 +1,4 @@
-reporting_year,npri_id,facility_name,company_name,naics,province,cas_number,substance_name,group,category,quantity,units,estimation_method
+reporting_year,npri_id,facility_name,company_name,naics,province,cas_number,substance_name,group_escaped,category,quantity,units,estimation_method
 2015,11,Hexion Canada Inc. - Edmonton Facility,Hexion Canada Inc.,325210,AB,NA - 16,Ammonia (total),Off-site Disposal,Landfill,1,tonnes,O
 2015,11,Hexion Canada Inc. - Edmonton Facility,Hexion Canada Inc.,325210,AB,108-95-2,Phenol (and its salts),Off-site Disposal,Landfill,0.01,tonnes,O
 2015,11,Hexion Canada Inc. - Edmonton Facility,Hexion Canada Inc.,325210,AB,50-00-0,Formaldehyde,Off-site Disposal,Landfill,0.04,tonnes,O

@@ -46,6 +46,10 @@ GEM
     domain_name (0.5.20160216)
       unf (>= 0.0.5, < 1.0.0)
     equalizer (0.0.11)
+    ferry (2.0.0)
+      highline (~> 1.6.21)
+      progressbar (~> 0.21.0)
+    highline (1.6.21)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     i18n (0.7.0)
@@ -59,6 +63,7 @@ GEM
     nokogiri (1.8.0)
       mini_portile2 (~> 2.2.0)
     pg (0.18.4)
+    progressbar (0.21.0)
     rake (10.4.2)
     rest-client (1.8.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -111,6 +116,7 @@ DEPENDENCIES
   codacy-coverage
   csv-importer
   csv_fast_importer!
+  ferry
   mysql2 (>= 0.3.10)
   pg (>= 0.18.4)
   rake (~> 10.0)

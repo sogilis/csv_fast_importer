@@ -41,7 +41,8 @@ module Benchmark
       'bulk_insert' => :bulk_insert,
       'CSV.foreach + upsert' => :upsert,
       'CSVImporter' => :csv_importer,
-      'ActiveImporter' => :active_importer
+      'ActiveImporter' => :active_importer,
+      'Ferry' => :ferry
     }
     # Following gem is not studied here because of lack of maintenance:
     #   - active_record_importer
@@ -81,7 +82,7 @@ module Benchmark
         Province varchar(255) NULL,
         CAS_Number varchar(255) NULL,
         substance_name varchar(255) NULL,
-        "group" varchar(255) NULL,
+        group_escaped varchar(255) NULL,
         Category varchar(255) NULL,
         Quantity decimal NULL,
         Units varchar(255) NULL,
@@ -94,8 +95,15 @@ module Benchmark
 
   def self.bench
     start_time = Time.now
-    yield
+    block_stdout { yield }
     Time.now - start_time
+  end
+
+  def self.block_stdout
+    original_stdout = $stdout
+    $stdout = File.open(File::NULL, "w")
+    yield
+    $stdout = original_stdout
   end
 
   def self.csv_fast_importer(file)
@@ -165,5 +173,25 @@ module Benchmark
 
   def self.active_importer(file)
     DatasetActiveImporter.import file.path
+  end
+
+  def self.ferry(file)
+    # Required to make ferry work without a rails application
+    require 'yaml'
+    FileUtils.mkdir_p('config') unless File.exists?('config')
+    config_file = 'config/database.yml'
+    FileUtils.touch(config_file)
+    config = YAML.load(<<-EOT)
+      environment:
+        adapter: postgresql
+        database: csv_fast_importer_test
+      EOT
+    File.open(config_file, 'w') { |f| f.write config.to_yaml }
+
+    require 'ferry'
+    importer = Ferry::Importer.new
+    importer.import_csv "environment", "datasets", file.path
+
+    FileUtils.rm(config_file)
   end
 end
