@@ -4,6 +4,17 @@
 
 A gem to import CSV files' content into a PostgreSQL or MySQL database. It is respectively based on [PostgreSQL `COPY`](https://wiki.postgresql.org/wiki/COPY) and [MySQL `LOAD DATA INFILE`](https://dev.mysql.com/doc/refman/5.7/en/load-data.html) which are designed to be as fast as possible.
 
+## Why?
+
+CSV importation is a common task which can be done by more than 6 different gems, but none of them is able to import **1 million of lines in a few seconds** (see benchmark below). Here is why this gem was created.
+
+Here is an indicative benchmark to compare available solutions (lower is better):
+
+![Benchmark](benchmark/result_with_annotation.png?raw=true "Benchmark")
+
+Represents the **duration (ms)** to import a **10 000 lines** file in local PostgreSQL instance on OSX laptop.
+Like all benchmarks, some tuning can produce different results, but nevertheless, this chart gives a big picture.
+
 ## Requirements
 
 - Rails (ActiveRecord in fact)
@@ -11,6 +22,7 @@ A gem to import CSV files' content into a PostgreSQL or MySQL database. It is re
 
 ## Limitations
 
+- Usuel ActiveRecord process (validations, callbacks, computed fields like `created_at`...) is bypassed. This is the price for performance
 - Custom enclosing field (ex: `"`) is not supported yet
 - Custom line serparator (ex: `\r\n` for windows file) is not supported yet
 - MySQL: encoding is not supported yet
