@@ -9,7 +9,7 @@ We tried here to build a big picture on all main strategies.
 
 ## Modus operandi
 
-With each identified strategy, a **10 000 lines** CSV file (`datasets.csv`) is imported in a **PostgreSQL** database.
+With each identified strategy, a **10 000 lines** CSV file (`datasets.csv`) is imported in a **PostgreSQL** database. A small file is used here because some strategies would have take hours to import a file with a millions of lines.
 
 :information_source: `datasets.csv` was built from [canadian open data](http://ouvert.canada.ca/data/fr/dataset), specially from file `NPRI-SubsDisp-Normalized-Since1993.csv` which was truncated to 10 000 lines.
 
@@ -119,13 +119,22 @@ First of all, CSV reading took approximatively **400ms** with `CSV.foreach`, and
 
 We also can notice that all strategies based on Rails' `create!` are very slow. Indeed, this strategy execute each SQL `INSERT` in a dedicated statement, and all ActiveRecord process (validations, callbacks...) is also executed. This last point could be very usefull in a Rails application, but is the main drawback when you look for performance.
 
-`upsert` could be more efficient with an id column in imported file (and a unique constraint in database schema), which is not the case here. To give some idea, duration would be divided by 2 :rocket: with such additional column.
+`upsert` could be more efficient with an id column in imported file (and a unique constraint in database schema), which is not the case here. To give some idea, duration would be divided by 2 with such additional column.
+
+Finally, `CSVFastImport` executes one single statement (with `COPY` command) which delegates operation to PostgreSQL instance. Then, CSV file is directly read by database engine witout any constraints (SQL standards, communication protocol...). This is the fastest way to import data in a database :rocket:.
 
 ## How to execute this benchmark?
 
-- Start local PostgreSQL database
-- Execute benchmark
+Start local PostgreSQL instance.
+
+Create database
+```shell
+bundle exec rake test:db:create
+```
+
+Execute benchmark
 ```
 bundle exec rake benchmark
 ```
 
+:information_source: Environment variables `DB_USERNAME` and `DB_PASSWORD` will be used for database authentication. Default is anonymous connection (works great with OSX and [Postgres.app](https://postgresapp.com)).

@@ -16,6 +16,7 @@ class TestDatabase
     config_file = Pathname.new(File.dirname(__FILE__)).join("database.#{@type}.yml")
     @configuration = YAML.load_file(config_file)
     @configuration["username"] = ENV["DB_USERNAME"] if ENV.has_key? "DB_USERNAME"
+    @configuration["password"] = ENV["DB_PASSWORD"] if ENV.has_key? "DB_PASSWORD"
   end
 
   def name
