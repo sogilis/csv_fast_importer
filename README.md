@@ -182,3 +182,4 @@ In few words:
 - [ ] MySQL: support row_index_column parameter
 - [ ] MySQL: run multiple SQL queries in single statement
 - [ ] Refactor tests (with should-> must / should -> expect / subject...)
+- [ ] Reduce technical debt on db connection (test & benchmark)
