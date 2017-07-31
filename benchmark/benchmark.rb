@@ -59,10 +59,11 @@ def prepare_dataset(db)
   File.new('benchmark/datasets.csv')
 end
 
-def bench
+# In milliseconds
+def measure_duration
   start_time = Time.now
   block_stdout { yield }
-  Time.now - start_time
+  1000 * (Time.now - start_time)
 end
 
 def block_stdout
@@ -193,10 +194,10 @@ strategies.each do |strategy_label, method|
   db.execute 'TRUNCATE TABLE datasets'
   printf "%-50s: ", strategy_label
 
-  duration = bench { send(method, file) }
+  duration = measure_duration { send(method, file) }
 
   additionnal_info = '(file partially imported)' if Dataset.count < line_count - 1 # Header
-  printf "%ss %s\n", duration, additionnal_info
+  printf "%s ms %s\n", duration, additionnal_info
 end
 puts
 puts "Benchmark finished."
