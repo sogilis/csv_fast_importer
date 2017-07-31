@@ -119,6 +119,8 @@ Results variability accros multiple executions is lower then 5%.
 
 First of all, we can notice that all strategies based on Rails' `create!` are very slow. Indeed, this strategy run each sql `INSERT` in a dedicated statement, and all ActiveRecord process (validations, callbacks...) is also executed. This last point could be very usefull in a Rails application, but is the main drawback when you look for performance.
 
+`upsert` could be more efficient with an id column in imported file (and a unique constraint in database schema), which is not the case here. To you some idea, duration would be divided by 2 :rocket:.
+
 ## How to execute this benchmark?
 
 - Start local PostgreSQL database
