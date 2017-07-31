@@ -105,7 +105,7 @@ def smarter_csv_and_activerecord_import(file)
   require 'activerecord-import/base'
   SmarterCSV.process(file.path, chunk_size: 1000) do |dataset_attributes|
     datasets = dataset_attributes.map { |attributes| Dataset.new attributes }
-    Dataset.import dataset_attributes.first.keys, datasets, batch_size: 10, validate: false
+    Dataset.import dataset_attributes.first.keys, datasets, batch_size: 100, validate: false
   end
 end
 
