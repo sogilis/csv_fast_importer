@@ -10,7 +10,7 @@ CSV importation is a common task which can be done by more than 6 different gems
 
 Here is an indicative benchmark to compare available solutions. It represents the **duration (ms)** to import a **10 000 lines** csv file into a local PostgreSQL instance on a laptop running OSX (lower is better):
 
-![Benchmark](benchmark/result.png?raw=true "Benchmark")
+![Benchmark](benchmark/results.png?raw=true "Benchmark")
 
 Like all benchmarks, some tuning can produce different results, yet this chart gives a big picture. See [benchmark details](benchmark/README.md).
 

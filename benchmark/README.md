@@ -107,7 +107,7 @@ Same constraints than `activerecord-import`: batch processing improves performan
 
 ## Results
 
-![Benchmark](result.png?raw=true "Benchmark")
+![Benchmark](results.png?raw=true "Benchmark")
 
 Produced on a MacBookPro (OSX 10.12.6, i5 2.4GHz, 8Go RAM, Flash drive), with local PostgreSQL **9.6.1.0** instance.
 
