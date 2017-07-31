@@ -80,7 +80,7 @@ def csv_fast_importer(file)
   CsvFastImporter.import file, col_sep: ','
 end
 
-def csv_foreach_create(file)
+def csv_foreach_and_create(file)
   require 'csv'
   Dataset.transaction do
     CSV.foreach(file, headers: true) do |row|
@@ -90,7 +90,7 @@ def csv_foreach_create(file)
 end
 
 # Variable : CSV chunk size
-def smarter_csv_create(file)
+def smarter_csv_and_create(file)
   require 'smarter_csv'
   Dataset.transaction do
     SmarterCSV.process(file.path, chunk_size: 1000) do |dataset_attributes|
@@ -110,7 +110,7 @@ def smarter_csv_and_activerecord_import(file)
 end
 
 # Variable : CSV chunk size + INSERT chunk size
-def bulk_insert(file)
+def smarter_csv_and_bulk_insert(file)
   require 'smarter_csv'
   require 'bulk_insert'
   SmarterCSV.process(file.path, chunk_size: 1000) do |dataset_attributes|
@@ -126,7 +126,7 @@ def bulk_insert(file)
   # end
 end
 
-def upsert(file)
+def csv_foreach_and_upsert(file)
   require 'csv'
   require 'upsert'
   Upsert.logger.level = Logger::ERROR
@@ -176,11 +176,11 @@ puts "Start benchmark with a #{line_count} lines file."
 
 strategies = {
   'CsvFastImporter' => :csv_fast_importer,
-  'CSV.foreach + ActiveRecord .create' => :csv_foreach_create,
-  'SmarterCSV + ActiveRecord .create' => :smarter_csv_create,
+  'CSV.foreach + ActiveRecord .create' => :csv_foreach_and_create,
+  'SmarterCSV + ActiveRecord .create' => :smarter_csv_and_create,
   'SmarterCSV + activerecord-import' => :smarter_csv_and_activerecord_import,
-  'bulk_insert' => :bulk_insert,
-  'CSV.foreach + upsert' => :upsert,
+  'SmarterCSV + bulk_insert' => :smarter_csv_and_bulk_insert,
+  'CSV.foreach + upsert' => :csv_foreach_and_upsert,
   'CSVImporter' => :csv_importer,
   'ActiveImporter' => :active_importer,
   'Ferry' => :ferry
