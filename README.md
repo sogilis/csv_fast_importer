@@ -171,7 +171,7 @@ In few words:
 >    and
 > 3. PATCH version when you make backwards-compatible bug fixes.
 
-## Roadmap
+## Backlog (unordered)
 
 - [ ] Code Review
 - [ ] Publish gem (#30)
@@ -183,3 +183,4 @@ In few words:
 - [ ] MySQL: run multiple SQL queries in single statement
 - [ ] Refactor tests (with should-> must / should -> expect / subject...)
 - [ ] Reduce technical debt on db connection (test & benchmark)
+- [ ] SQLite support
