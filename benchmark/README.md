@@ -49,7 +49,7 @@ CSV file reading can be customized with chunk size (this may affect performance)
 
 `activerecord-import` becomes efficient when importing multiple rows in same time. But importing the whole CSV file is not a solution because of memory foot print :boom:. So, we read here the CSV file by batch. This is done with `SmarterCSV` which have a small effect on global performances (see results).
 
-:information_source: Model validations are skipped here to improve performances.
+:information_source: Model validations are skipped here to improve performances even if no validation was defined.
 
 ```ruby
   require 'smarter_csv'
@@ -105,21 +105,21 @@ Same constraints than `activerecord-import`: batch processing improves performan
   Ferry::Importer.new.import_csv "benchmark_env", "datasets", file.path
 ```
 
-
 ## Results
 
 ![Benchmark](result.png?raw=true "Benchmark")
 
-Produced on a MacBookPro (i5 2.4GHz, 8Go RAM, Flash drive), with local PostgreSQL **9.6.1.0** instance.
+Produced on a MacBookPro (OSX 10.12.6, i5 2.4GHz, 8Go RAM, Flash drive), with local PostgreSQL **9.6.1.0** instance.
 
-Results variability accros multiple executions is lower then 5%.
-
+:information_source: Results variability accros multiple executions is lower then 5%.
 
 ## Explanations
 
-First of all, we can notice that all strategies based on Rails' `create!` are very slow. Indeed, this strategy run each sql `INSERT` in a dedicated statement, and all ActiveRecord process (validations, callbacks...) is also executed. This last point could be very usefull in a Rails application, but is the main drawback when you look for performance.
+First of all, CSV reading took approximatively **400ms** with `CSV.foreach`, and **1000ms** with `SmarterCSV`.
 
-`upsert` could be more efficient with an id column in imported file (and a unique constraint in database schema), which is not the case here. To you some idea, duration would be divided by 2 :rocket:.
+We also can notice that all strategies based on Rails' `create!` are very slow. Indeed, this strategy execute each SQL `INSERT` in a dedicated statement, and all ActiveRecord process (validations, callbacks...) is also executed. This last point could be very usefull in a Rails application, but is the main drawback when you look for performance.
+
+`upsert` could be more efficient with an id column in imported file (and a unique constraint in database schema), which is not the case here. To give some idea, duration would be divided by 2 :rocket: with such additional column.
 
 ## How to execute this benchmark?
 
