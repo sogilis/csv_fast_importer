@@ -152,15 +152,14 @@ def ferry(file)
   config_file = 'config/database.yml'
   FileUtils.touch(config_file)
   config = YAML.load(<<-EOT)
-    environment:
+    benchmark_env:
       adapter: postgresql
       database: csv_fast_importer_test
     EOT
   File.open(config_file, 'w') { |f| f.write config.to_yaml }
 
   require 'ferry'
-  importer = Ferry::Importer.new
-  importer.import_csv "environment", "datasets", file.path
+  Ferry::Importer.new.import_csv "benchmark_env", "datasets", file.path
 
   FileUtils.rm(config_file)
 end
