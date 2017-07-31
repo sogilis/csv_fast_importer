@@ -12,8 +12,7 @@ Here is an indicative benchmark to compare available solutions. It represents th
 
 ![Benchmark](benchmark/result.png?raw=true "Benchmark")
 
-Like all benchmarks, some tuning can produce different results, yet this chart gives a big picture.
-You can run this benchmark from your own with `bundle exec rake benchmark`.
+Like all benchmarks, some tuning can produce different results, yet this chart gives a big picture. See [benchmark details](benchmark/README.md).
 
 ## Requirements
 
