@@ -159,6 +159,9 @@ def ferry(file)
     EOT
   File.open(config_file, 'w') { |f| f.write config.to_yaml }
 
+  # Prevent progress output
+  $stderr.reopen(Tempfile.new('benchmark_ferry').path, "w")
+
   require 'ferry'
   Ferry::Importer.new.import_csv "benchmark_env", "datasets", file.path
 
