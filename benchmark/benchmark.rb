@@ -11,11 +11,11 @@ puts "Start benchmark with a #{lines_count} lines file."
 
 puts "Running benchmark..."
 require_relative './strategies'
-STRATEGIES.each do |strategy_label, block|
+STRATEGIES.each do |label, strategy|
   db.execute 'TRUNCATE TABLE datasets'
-  printf "%-35s: ", strategy_label
+  printf "%-35s: ", label
 
-  duration = measure_duration { block.call(file) }
+  duration = measure_duration { strategy.call(file) }
 
   warning_message = '(file partially imported)' if Dataset.count < lines_count - 1 # Header
   printf "%20d ms %s\n", duration, warning_message
