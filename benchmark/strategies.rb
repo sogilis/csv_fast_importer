@@ -2,43 +2,45 @@
 # All tested strategy (implementations).
 # -----------------------------------------------------------------------------
 
-# CSVFastImporter -------------------------------------------------------------
-def csv_fast_importer(file)
-  CsvFastImporter.import file, col_sep: ','
-end
+STRATEGIES = {}
 
-# CSV.foreach + ActiveRecord .create! -----------------------------------------
-def csv_foreach_and_create(file)
+# CSVFastImporter -------------------------------------------------------------
+STRATEGIES['CSVFastImporter'] = -> (file) {
+  CsvFastImporter.import file, col_sep: ','
+}
+
+# CSV.foreach + ActiveRecord create -------------------------------------------
+STRATEGIES['CSV.foreach + ActiveRecord create'] = -> (file) {
   require 'csv'
   Dataset.transaction do
     CSV.foreach(file, headers: true) do |row|
       Dataset.create!(row.to_hash)
     end
   end
-end
+}
 
-# SmarterCSV + ActiveRecord .create! ------------------------------------------
-def smarter_csv_and_create(file)
+# SmarterCSV + ActiveRecord create --------------------------------------------
+STRATEGIES['SmarterCSV + ActiveRecord create'] = -> (file) {
   require 'smarter_csv'
   Dataset.transaction do
     SmarterCSV.process(file.path, chunk_size: 1000) do |dataset_attributes|
       Dataset.create! dataset_attributes
     end
   end
-end
+}
 
 # SmarterCSV + activerecord-import --------------------------------------------
-def smarter_csv_and_activerecord_import(file)
+STRATEGIES['SmarterCSV + activerecord-import'] = -> (file) {
   require 'smarter_csv'
   require 'activerecord-import/base'
   SmarterCSV.process(file.path, chunk_size: 1000) do |dataset_attributes|
     datasets = dataset_attributes.map { |attributes| Dataset.new attributes }
     Dataset.import dataset_attributes.first.keys, datasets, batch_size: 100, validate: false
   end
-end
+}
 
 # SmarterCSV + BulkInsert -----------------------------------------------------
-def smarter_csv_and_bulk_insert(file)
+STRATEGIES['SmarterCSV + BulkInsert'] = -> (file) {
   require 'smarter_csv'
   require 'bulk_insert'
   SmarterCSV.process(file.path, chunk_size: 1000) do |dataset_attributes|
@@ -52,10 +54,9 @@ def smarter_csv_and_bulk_insert(file)
   #     end
   #   end
   # end
-end
+}
 
-# CSV.foreach + Upsert --------------------------------------------------------
-def csv_foreach_and_upsert(file)
+STRATEGIES['CSV.foreach + upsert'] = -> (file) {
   require 'csv'
   require 'upsert'
   Upsert.logger.level = Logger::ERROR
@@ -64,7 +65,7 @@ def csv_foreach_and_upsert(file)
       upsert.row(row.to_hash)
     end
   end
-end
+}
 
 
 # CSVImporter -----------------------------------------------------------------
@@ -75,9 +76,9 @@ class DatasetCSVImporter
   model Dataset
 end
 
-def csv_importer(file)
+STRATEGIES['CSVImporter'] = -> (file) {
   DatasetCSVImporter.new(path: file.path).run!
-end
+}
 
 # ActiveImporter --------------------------------------------------------------
 require 'active_importer'
@@ -85,13 +86,12 @@ class DatasetActiveImporter < ActiveImporter::Base
   imports Dataset
 end
 
-# ActiveImporter --------------------------------------------------------------
-def active_importer(file)
+STRATEGIES['ActiveImporter'] = -> (file) {
   DatasetActiveImporter.import file.path
-end
+}
 
 # ferry -----------------------------------------------------------------------
-def ferry(file)
+STRATEGIES['ferry'] = -> (file) {
   # Required to make ferry work without a rails application
   require 'yaml'
   FileUtils.mkdir_p('config') unless File.exists?('config')
@@ -111,5 +111,5 @@ def ferry(file)
   Ferry::Importer.new.import_csv "benchmark_env", "datasets", file.path
 
   FileUtils.rm(config_file)
-end
+}
 
