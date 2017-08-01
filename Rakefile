@@ -39,6 +39,6 @@ namespace :test do
 end
 
 desc "Benchmark all available solutions to import CSV in Postgres database"
-task :bench do
+task :benchmark do
   require_relative 'benchmark/benchmark'
 end
