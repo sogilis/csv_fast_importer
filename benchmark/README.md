@@ -9,9 +9,9 @@ We tried here to build a big picture on all main strategies.
 
 ## Modus operandi
 
-With each identified strategy, a **10 000 lines** CSV file (`datasets.csv`) is imported in a **PostgreSQL** database. A small file is used here because some strategies would have take hours to import a file with a millions of lines.
+With each identified strategy, a **10 000 lines** CSV file (created from first lines of `NPRI-SubsDisp-Normalized-Since1993.csv`) is imported in a **PostgreSQL** database. A small file is used here because some strategies would have take hours to import a file with a millions of lines.
 
-:information_source: `datasets.csv` was built from [canadian open data](http://ouvert.canada.ca/data/fr/dataset), specially from file `NPRI-SubsDisp-Normalized-Since1993.csv` which was truncated to 10 000 lines.
+:information_source: `NPRI-SubsDisp-Normalized-Since1993.csv` was downloaded from [canadian open data](http://ouvert.canada.ca/data/fr/dataset).
 
 :information_source: Duration measure includes file reading and database writing, after transaction commit.
 

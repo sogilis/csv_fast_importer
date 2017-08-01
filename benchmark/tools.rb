@@ -10,14 +10,14 @@ def database_connect
   CsvFastImporter::DatabaseFactory.build
 end
 
-# datasets.csv was downloaded from http://ouvert.canada.ca/data/fr/dataset
-# and truncated to 10 000 lines
-# Original file name: NPRI-SubsDisp-Normalized-Since1993.csv
-def prepare_dataset(db)
+# Downloaded from http://ouvert.canada.ca/data/fr/dataset
+ORIGINAL_DATASET_FILE = File.new('benchmark/NPRI-SubsDisp-Normalized-Since1993.csv')
+
+def build_dataset(db, file_name, lines_count)
   puts "Database schema generation..."
-  db.execute 'DROP TABLE IF EXISTS datasets'
+  db.execute "DROP TABLE IF EXISTS #{file_name}"
   db.execute <<-SQL
-    CREATE TABLE datasets (
+    CREATE TABLE #{file_name} (
       Reporting_Year smallint NULL,
       NPRI_ID integer NULL,
       Facility_Name varchar(255) NULL,
@@ -34,7 +34,10 @@ def prepare_dataset(db)
     )
   SQL
 
-  File.new('benchmark/datasets.csv')
+  dataset_file = File.new("benchmark/#{file_name}.csv", 'w+')
+  `head -n #{lines_count} #{ORIGINAL_DATASET_FILE.path} > #{dataset_file.path}`
+  yield dataset_file
+  File.delete(dataset_file)
 end
 
 def count(file)
