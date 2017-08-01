@@ -50,7 +50,9 @@ end
 
 def block_stdout
   original_stdout = $stdout
-  $stdout = File.open(File::NULL, "w")
-  yield
-  $stdout = original_stdout
+  File.open(File::NULL, "w") do |file|
+    $stdout = file
+    yield
+    $stdout = original_stdout
+  end
 end
