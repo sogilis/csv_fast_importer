@@ -32,7 +32,7 @@ With each identified strategy, a **10 000 lines** CSV file (created from first l
   end
 ```
 
-### [SmarterCSV](https://github.com/tilo/smarter_csv) + ActiveRecord .create
+### [SmarterCSV](https://github.com/tilo/smarter_csv) 1.1.4 + ActiveRecord .create
 
 CSV file reading can be customized with chunk size (this may affect performance).
 
@@ -45,7 +45,7 @@ CSV file reading can be customized with chunk size (this may affect performance)
   end
 ```
 
-### [SmarterCSV](https://github.com/tilo/smarter_csv) + [activerecord-import](https://github.com/zdennis/activerecord-import)
+### [SmarterCSV](https://github.com/tilo/smarter_csv) 1.1.4 + [activerecord-import](https://github.com/zdennis/activerecord-import) 0.10.0
 
 `activerecord-import` becomes efficient when importing multiple rows in same time. But importing the whole CSV file is not a solution because of memory foot print :boom:. So, we read here the CSV file by batch. This is done with `SmarterCSV` which have a small effect on global performances (see results).
 
@@ -60,7 +60,7 @@ CSV file reading can be customized with chunk size (this may affect performance)
   end
 ```
 
-### [SmarterCSV](https://github.com/tilo/smarter_csv) + [bulk_insert](https://github.com/jamis/bulk_insert)
+### [SmarterCSV](https://github.com/tilo/smarter_csv) 1.1.4 + [bulk_insert](https://github.com/jamis/bulk_insert) 1.5.0
 
 Same constraints than `activerecord-import`: batch processing improves performances.
 
@@ -72,7 +72,7 @@ Same constraints than `activerecord-import`: batch processing improves performan
   end
 ```
 
-### CSV.foreach + [upsert](https://github.com/seamusabshere/upsert)
+### CSV.foreach + [upsert](https://github.com/seamusabshere/upsert) 2.2.1
 
 ```ruby
   require 'csv'
@@ -84,19 +84,19 @@ Same constraints than `activerecord-import`: batch processing improves performan
   end
 ```
 
-### [CSVImporter](https://github.com/pcreux/csv-importer)
+### [CSVImporter](https://github.com/pcreux/csv-importer) 0.3.2
 
 ```ruby
   DatasetCSVImporter.new(path: file.path).run!
 ```
 
-### [ActiveImporter](https://github.com/continuum/active_importer)
+### [ActiveImporter](https://github.com/continuum/active_importer) 0.2.6
 
 ```ruby
   DatasetActiveImporter.import file.path
 ```
 
-### [Ferry](https://github.com/cmu-is-projects/ferry)
+### [Ferry](https://github.com/cmu-is-projects/ferry) 2.0.0
 
 :information_source: `Ferry` is more than juste a gem which import CSV files but is can also be used to do that.
 
