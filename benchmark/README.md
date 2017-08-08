@@ -98,7 +98,7 @@ Same constraints than `activerecord-import`: batch processing improves performan
 
 ### [Ferry](https://github.com/cmu-is-projects/ferry) 2.0.0
 
-:information_source: `Ferry` is more than juste a gem which import CSV files but is can also be used to do that.
+:information_source: `Ferry` is more than juste a gem which import CSV files but it can also be used to do that.
 
 ```ruby
   require 'ferry'
