@@ -21,7 +21,7 @@ Like all benchmarks, some tuning can produce different results, yet this chart g
 
 ## Limitations
 
-- Usuel ActiveRecord process (validations, callbacks, computed fields like `created_at`...) is bypassed. This is the price for performance
+- Usual ActiveRecord process (validations, callbacks, computed fields like `created_at`...) is bypassed. This is the price for performance
 - Custom enclosing field (ex: `"`) is not supported yet
 - Custom line serparator (ex: `\r\n` for windows file) is not supported yet
 - MySQL: encoding is not supported yet
@@ -44,7 +44,7 @@ You can install the gem by yourself too:
 $ gem install csv_fast_importer
 ```
 
-**MySQL only** :warning: enable `local_infile` for both [client](https://dev.mysql.com/doc/refman/5.7/en/source-configuration-options.html#option_cmake_enabled_local_infile) and [server](https://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html#sysvar_local_infile). In Rails application, juste add `local_infile: true` to your database config file `databse.yml` to configure the database client. See [Security Issues with LOAD DATA LOCAL](https://dev.mysql.com/doc/refman/5.7/en/load-data-local.html) for more details.
+**For MySQL** :warning: enable `local_infile` for both [client](https://dev.mysql.com/doc/refman/5.7/en/source-configuration-options.html#option_cmake_enabled_local_infile) and [server](https://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html#sysvar_local_infile). In Rails application, juste add `local_infile: true` to your database config file `databse.yml` to configure the database client. See [Security Issues with LOAD DATA LOCAL](https://dev.mysql.com/doc/refman/5.7/en/load-data-local.html) for more details.
 
 
 ## Usage
@@ -173,8 +173,6 @@ In few words:
 
 ## Backlog (unordered)
 
-- [ ] Code Review
-- [ ] Publish gem (#30)
 - [ ] Support custom enclosing field (ex: `"`)
 - [ ] Support custom line serparator (ex: \r\n for windows file)
 - [ ] MySQL: support encoding parameter. See https://dev.mysql.com/doc/refman/5.5/en/charset-charsets.html
