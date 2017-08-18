@@ -1,0 +1,21 @@
+default: &default
+  adapter: postgresql
+  host: localhost
+  encoding: UTF-8
+  pool: 5
+  timeout: 5000
+
+development:
+  <<: *default
+  database: csv_fast_importer/sampleapp/dev
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  <<: *default
+  database: csv_fast_importer/sampleapp/test
+
+production:
+  <<: *default
+  database: csv_fast_importer/sampleapp
