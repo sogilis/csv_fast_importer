@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["sogilis@sogilis.com"]
 
   spec.summary       = "Fast CSV Importer"
-  spec.description   = "Import CSV files' content into a PostgreSQL database. It is based on the Postgre COPY command which is designed to be as faster as possible."
+  spec.description   = "A gem to import CSV files' content into a PostgreSQL or MySQL database. It is respectively based on PostgreSQL COPY and MySQL LOAD DATA INFILE which are designed to be as fast as possible."
   spec.homepage      = "https://github.com/sogilis/csv_fast_importer"
   spec.license       = "MIT"
 
