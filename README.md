@@ -57,9 +57,9 @@ class:
 require 'csv_fast_importer'
 
 file = File.new '/path/to/knights.csv'
-imported_lines_number = CsvFastImporter.import file
+imported_lines_count = CsvFastImporter.import(file)
 
-puts imported_lines_number
+puts imported_lines_count
 ```
 
 Under the hood, CSV Fast Importer deletes data from the `knights` table and
