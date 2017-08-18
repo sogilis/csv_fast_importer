@@ -173,8 +173,10 @@ In few words:
 
 ## Backlog (unordered)
 
+- [ ] Support any column and table case
 - [ ] Support custom enclosing field (ex: `"`)
 - [ ] Support custom line serparator (ex: \r\n for windows file)
+- [ ] Support custom type convertion
 - [ ] MySQL: support encoding parameter. See https://dev.mysql.com/doc/refman/5.5/en/charset-charsets.html
 - [ ] MySQL: support transaction parameter
 - [ ] MySQL: support row_index_column parameter
