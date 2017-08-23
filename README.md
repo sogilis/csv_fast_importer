@@ -32,8 +32,8 @@ Like all benchmarks, some tuning can produce different results, yet this chart g
 
 Add the dependency to your Gemfile:
 
-```gemfile
-gem 'csv_fast_importer`
+```ruby
+gem 'csv_fast_importer'
 ```
 
 Run `bundle install`.
@@ -117,7 +117,7 @@ Lancelot;lancelot@logre.cel
 To map the `KNIGHT_EMAIL` column to the `email` database field:
 
 ```ruby
-CsvFastImporter.import file, mapping: { email: :knight_email }
+CsvFastImporter.import file, mapping: { knight_email: :email }
 ```
 
 ## How to contribute?
