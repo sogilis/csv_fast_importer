@@ -139,6 +139,8 @@ $ bundle exec rake test:db:create
 ```
 This will connect to `localhost` PostgreSQL database without user (see `config/database.postgres.yml`) and create a new database dedicated to tests.
 
+*Warning:* database instance have to allow database creation with `UTF-8` encoding.
+
 Finally, you can run all tests with RSpec like this:
 
 ```sh
