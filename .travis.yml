@@ -1,4 +1,6 @@
 language: ruby
+before_install:
+  - gem install bundler
 script:
   - bundle exec rake test:db:create
   - bundle exec rspec spec
