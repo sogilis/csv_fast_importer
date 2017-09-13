@@ -71,7 +71,7 @@ For instance, a `FIRSTNAME` CSV column will be mapped to the `firstname` field.
 
 | Option key | Purpose | Default value |
 | ------------ | ------------- | ------------- |
-| *encoding* | File encoding. *PostgreSQL only*| `'UTF-8'` |
+| *encoding* | File encoding. *PostgreSQL only* (see [FAQ](doc/faq.md) for more details)| `'UTF-8'` |
 | *col_sep* | Column separator in file | `';'` |
 | *destination* | Destination table | given base filename (without extension) |
 | *mapping* | Column mapping | `{}` |
@@ -79,11 +79,10 @@ For instance, a `FIRSTNAME` CSV column will be mapped to the `firstname` field.
 | *transaction* | Execute DELETE and INSERT in same transaction. *PostgreSQL only* | `:enabled` |
 | *deletion* | Row deletion method (`:delete` for SQL DELETE, `:truncate` for SQL TRUNCATE or `:none` for no deletion before import) | `:delete` |
 
-Your CSV file should be encoding in UTF-8 but you can specify another encoding
-with the `encoding` option (*PostgreSQL only*).
+If your CSV file is not encoded with same table than your database, you can specify encoding at the file opening (see [FAQ](doc/faq.md) for more details):
 
 ```ruby
-CsvFastImporter.import file, encoding: 'ISO-8859-1'
+file = File.new '/path/to/knights.csv', encoding: 'ISO-8859-1'
 ```
 
 You can specify a different separator column with the `col_sep` option (`;` by
@@ -119,6 +118,10 @@ To map the `KNIGHT_EMAIL` column to the `email` database field:
 ```ruby
 CsvFastImporter.import file, mapping: { knight_email: :email }
 ```
+
+## Need help?
+
+See [FAQ](doc/faq.md).
 
 ## How to contribute?
 
