@@ -184,3 +184,9 @@ In few words:
 - [ ] Refactor tests (with should-> must / should -> expect / subject...)
 - [ ] Reduce technical debt on db connection (test & benchmark)
 - [ ] SQLite support
+
+## How to release new version?
+
+```bash
+bundle exec rake release:make[major|minor|patch|x.y.z]
+```
