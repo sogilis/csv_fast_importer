@@ -23,7 +23,7 @@ Like all benchmarks, some tuning can produce different results, yet this chart g
 
 - Usual ActiveRecord process (validations, callbacks, computed fields like `created_at`...) is bypassed. This is the price for performance
 - Custom enclosing field (ex: `"`) is not supported yet
-- Custom line serparator (ex: `\r\n` for windows file) is not supported yet
+- Custom line separator (ex: `\r\n` for windows file) is not supported yet
 - MySQL: encoding is not supported yet
 - MySQL: transaction is not supported yet
 - MySQL: row_index is not supported yet

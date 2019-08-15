@@ -2,7 +2,7 @@
 
 ## How to specify encoding?
 
-Multiple componants are involved when `CSV Fast Importer` is executed:
+Multiple components are involved when `CSV Fast Importer` is executed:
 
 - file
 - ruby `File` wrapper
@@ -10,7 +10,7 @@ Multiple componants are involved when `CSV Fast Importer` is executed:
 - SQL command (`COPY` for PostgreSQL)
 - database server
 
-Encoding may be consistent accross all these componants. Here is how to specify or check each componant encoding.
+Encoding must be consistent accross all these components. Here is how to specify or check each component encoding.
 
 ### File
 
