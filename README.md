@@ -28,6 +28,8 @@ Like all benchmarks, some tuning can produce different results, yet this chart g
 - MySQL: transaction is not supported yet
 - MySQL: row_index is not supported yet
 
+Note about custom line separator: it might work by opening the file with the `universal_newline` argument (e.g. `file = File.new(path, universal_newline: true)`). Unfortunately, we weren't able to reproduce and test it so we don't support it "officialy". You can find more information in [this ticket](https://github.com/sogilis/csv_fast_importer/pull/45#issuecomment-326578839) (in French).
+
 ## Installation
 
 Add the dependency to your Gemfile:
