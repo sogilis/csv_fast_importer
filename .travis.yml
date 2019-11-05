@@ -7,11 +7,15 @@ script:
   - if [ "$RUN_BENCHMARK" = "true" ]; then DATASET_SIZE=100 bundle exec rake benchmark; fi
 rvm:
   2.3.0
-matrix:
+jobs:
   include:
     - env:
       - DB_TYPE=mysql
       - DB_USERNAME=travis
+      services:
+        - mysql
     - env:
       - DB_TYPE=postgres
       - RUN_BENCHMARK=true
+      services:
+        - postgresql
