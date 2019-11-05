@@ -23,10 +23,12 @@ Like all benchmarks, some tuning can produce different results, yet this chart g
 
 - Usual ActiveRecord process (validations, callbacks, computed fields like `created_at`...) is bypassed. This is the price for performance
 - Custom enclosing field (ex: `"`) is not supported yet
-- Custom line serparator (ex: `\r\n` for windows file) is not supported yet
+- Custom line separator (ex: `\r\n` for windows file) is not supported yet
 - MySQL: encoding is not supported yet
 - MySQL: transaction is not supported yet
 - MySQL: row_index is not supported yet
+
+Note about custom line separator: it might work by opening the file with the `universal_newline` argument (e.g. `file = File.new(path, universal_newline: true)`). Unfortunately, we weren't able to reproduce and test it so we don't support it "officialy". You can find more information in [this ticket](https://github.com/sogilis/csv_fast_importer/pull/45#issuecomment-326578839) (in French).
 
 ## Installation
 
