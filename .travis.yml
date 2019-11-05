@@ -6,7 +6,7 @@ script:
   - bundle exec rspec spec
   - if [ "$RUN_BENCHMARK" = "true" ]; then DATASET_SIZE=100 bundle exec rake benchmark; fi
 rvm:
-  2.2.0
+  2.3.0
 matrix:
   include:
     - env:
