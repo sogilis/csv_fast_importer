@@ -59,7 +59,7 @@ GEM
     mime-types (2.99.1)
     mini_portile2 (2.3.0)
     minitest (5.11.2)
-    mysql2 (0.3.20)
+    mysql2 (0.4.10)
     netrc (0.11.0)
     nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
@@ -118,7 +118,7 @@ DEPENDENCIES
   csv-importer
   csv_fast_importer!
   ferry
-  mysql2 (>= 0.3.10)
+  mysql2 (>= 0.4.0)
   pg (>= 0.18.4)
   rake (~> 10.0)
   rspec
@@ -126,4 +126,4 @@ DEPENDENCIES
   upsert
 
 BUNDLED WITH
-   1.13.2
+   1.17.3
