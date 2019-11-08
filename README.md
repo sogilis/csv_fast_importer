@@ -187,6 +187,9 @@ In few words:
 
 ## How to release new version?
 
+Make sure your are in `master` branch. Then, run:
 ```bash
 bundle exec rake release:make[major|minor|patch|x.y.z]
 ```
+
+Example: `bundle exec rake release:make[minor]`
