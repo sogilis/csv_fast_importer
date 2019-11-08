@@ -12,9 +12,11 @@ namespace :release do
     release.apply!
 
     puts
-    puts "Changelog from #{release.last_version} to #{release.version}:"
+    puts "Changelog from #{release.last_version} to #{release.version}"
+    puts "---------------------------------------------------------------------"
     puts release.changelog
     puts "(Chores ignored)"
+    puts "---------------------------------------------------------------------"
 
     next if args[:dry_run]
 
@@ -25,9 +27,10 @@ namespace :release do
     puts
     puts "Run following commands to publish version #{release.version}:"
     puts "$ git push && git push --tags"
-    puts "$ Rake::Task['release'].invoke"
+    puts "$ bundle exec rake release"
     puts
-    puts "After that, do not forget to report changelog in Github Release."
+    puts "After that, do not forget to report changelog in Github Releases page:"
+    puts "https://github.com/sogilis/csv_fast_importer/releases"
   end
 end
 
