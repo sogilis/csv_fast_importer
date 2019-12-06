@@ -22,13 +22,28 @@ describe CsvFastImporter do
   end
 
   describe 'with custom file encoding', skip_mysql: true do
-    before do
-      file = write_file [ %w(name id), %w(trépassé 10) ], encoding: 'ISO-8859-1'
-      CsvFastImporter.import file, encoding: 'ISO-8859-1'
+    let(:file) { write_file [ %w(name id), %w(trépassé 10) ], encoding: 'ISO-8859-1' }
+
+    context 'with CSVFastImporter custom encoding' do
+      before do
+        CsvFastImporter.import file, encoding: 'ISO-8859-1'
+      end
+
+      it 'must import with correct encoding' do
+        db.query('SELECT name FROM knights').to_s.should eql 'trépassé'
+      end
     end
 
-    it 'must import with correct encoding' do
-      db.query('SELECT name FROM knights').to_s.should eql 'trépassé'
+    context 'with File encoding conversion' do
+      before do
+        file_with_conversion = File.new file.path, internal_encoding: 'UTF-8',
+                                                   external_encoding: 'ISO-8859-1'
+        CsvFastImporter.import file_with_conversion
+      end
+
+      it 'must import with correct encoding' do
+        db.query('SELECT name FROM knights').to_s.should eql 'trépassé'
+      end
     end
   end
 

@@ -14,7 +14,7 @@ class CSVWriter
         csv << line
       end
     end
-    File.new new_file
+    File.new new_file, options
   end
 
   def new_temp_folder

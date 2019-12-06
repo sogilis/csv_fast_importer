@@ -23,17 +23,19 @@ Like all benchmarks, some tuning can produce different results, yet this chart g
 
 - Usual ActiveRecord process (validations, callbacks, computed fields like `created_at`...) is bypassed. This is the price for performance
 - Custom enclosing field (ex: `"`) is not supported yet
-- Custom line serparator (ex: `\r\n` for windows file) is not supported yet
+- Custom line separator (ex: `\r\n` for windows file) is not supported yet
 - MySQL: encoding is not supported yet
 - MySQL: transaction is not supported yet
 - MySQL: row_index is not supported yet
+
+Note about custom line separator: it might work by opening the file with the `universal_newline` argument (e.g. `file = File.new(path, universal_newline: true)`). Unfortunately, we weren't able to reproduce and test it so we don't support it "officialy". You can find more information in [this ticket](https://github.com/sogilis/csv_fast_importer/pull/45#issuecomment-326578839) (in French).
 
 ## Installation
 
 Add the dependency to your Gemfile:
 
-```gemfile
-gem 'csv_fast_importer`
+```ruby
+gem 'csv_fast_importer'
 ```
 
 Run `bundle install`.
@@ -71,7 +73,7 @@ For instance, a `FIRSTNAME` CSV column will be mapped to the `firstname` field.
 
 | Option key | Purpose | Default value |
 | ------------ | ------------- | ------------- |
-| *encoding* | File encoding. *PostgreSQL only*| `'UTF-8'` |
+| *encoding* | File encoding. *PostgreSQL only* (see [FAQ](doc/faq.md) for more details)| `'UTF-8'` |
 | *col_sep* | Column separator in file | `';'` |
 | *destination* | Destination table | given base filename (without extension) |
 | *mapping* | Column mapping | `{}` |
@@ -79,11 +81,10 @@ For instance, a `FIRSTNAME` CSV column will be mapped to the `firstname` field.
 | *transaction* | Execute DELETE and INSERT in same transaction. *PostgreSQL only* | `:enabled` |
 | *deletion* | Row deletion method (`:delete` for SQL DELETE, `:truncate` for SQL TRUNCATE or `:none` for no deletion before import) | `:delete` |
 
-Your CSV file should be encoding in UTF-8 but you can specify another encoding
-with the `encoding` option (*PostgreSQL only*).
+If your CSV file is not encoded with same table than your database, you can specify encoding at the file opening (see [FAQ](doc/faq.md) for more details):
 
 ```ruby
-CsvFastImporter.import file, encoding: 'ISO-8859-1'
+file = File.new '/path/to/knights.csv', encoding: 'ISO-8859-1'
 ```
 
 You can specify a different separator column with the `col_sep` option (`;` by
@@ -117,8 +118,12 @@ Lancelot;lancelot@logre.cel
 To map the `KNIGHT_EMAIL` column to the `email` database field:
 
 ```ruby
-CsvFastImporter.import file, mapping: { email: :knight_email }
+CsvFastImporter.import file, mapping: { knight_email: :email }
 ```
+
+## Need help?
+
+See [FAQ](doc/faq.md).
 
 ## How to contribute?
 
@@ -135,6 +140,8 @@ Then, start your PostgreSQL database (ex: [Postgres.app](http://postgresapp.com)
 $ bundle exec rake test:db:create
 ```
 This will connect to `localhost` PostgreSQL database without user (see `config/database.postgres.yml`) and create a new database dedicated to tests.
+
+*Warning:* database instance have to allow database creation with `UTF-8` encoding.
 
 Finally, you can run all tests with RSpec like this:
 

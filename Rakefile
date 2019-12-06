@@ -13,7 +13,7 @@ namespace :test do
         when :postgres
           require 'pg'
           db.connect 'postgres'
-          ActiveRecord::Base.connection.execute "CREATE DATABASE #{db.name}"
+          ActiveRecord::Base.connection.execute "CREATE DATABASE #{db.name} ENCODING='UTF-8'"
 
         when :mysql
           require 'mysql2'
