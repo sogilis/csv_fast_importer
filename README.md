@@ -1,4 +1,4 @@
-[![Gem Version](https://badge.fury.io/rb/csv_fast_importer.svg)](https://badge.fury.io/rb/csv_fast_importer) [![Build Status](https://travis-ci.com/sogilis/csv_fast_importer.svg?branch=master)](https://travis-ci.com/sogilis/csv_fast_importer) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/1ecd555b2ff3414d92bc8674b29c68ea)](https://www.codacy.com/gh/sogilis/csv_fast_importer/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=sogilis/csv_fast_importer&amp;utm_campaign=Badge_Grade)
+[![Gem Version](https://badge.fury.io/rb/csv_fast_importer.svg)](https://badge.fury.io/rb/csv_fast_importer) [![Build Status](https://app.travis-ci.com/sogilis/csv_fast_importer.svg?branch=master)](https://app.travis-ci.com/sogilis/csv_fast_importer) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/1ecd555b2ff3414d92bc8674b29c68ea)](https://www.codacy.com/gh/sogilis/csv_fast_importer/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=sogilis/csv_fast_importer&amp;utm_campaign=Badge_Grade)
 
 
 # CSV Fast Importer
