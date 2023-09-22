@@ -1,0 +1,29 @@
+name: Tests
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+      - run: bundle install
+      - run: bundle exec rake test:db:create
+      - run: bundle exec rspec spec
+        env:
+          DB_TYPE: postgres
+          DB_PORT: 5432
+          DB_PASSWORD: password
+          DB_ROOT_PASSWORD: password
+          DB_USERNAME: postgres
