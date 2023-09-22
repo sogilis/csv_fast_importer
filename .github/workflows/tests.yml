@@ -1,0 +1,91 @@
+name: Tests
+
+on: push
+
+jobs:
+  postgres:
+    name: Test against PostgreSQL
+    runs-on: ubuntu-latest
+    env:
+      DB_TYPE: postgres
+      DB_PASSWORD: password
+      DB_USERNAME: postgres
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - run: bundle exec rake test:db:create
+      - run: bundle exec rspec spec
+      - uses: actions/upload-artifact@v3
+        with:
+          name: postgres-test-coverage
+          path: coverage/lcov/csv_fast_importer.lcov
+
+  mysql:
+    name: Test against MySQL
+    runs-on: ubuntu-latest
+    env:
+      DB_TYPE: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_ROOT_PASSWORD: password
+      DB_USERNAME: mysql
+      DB_PASSWORD: password
+      DB_DATABASE: csv_fast_importer_test
+    services:
+      mysql:
+        image: mysql
+        env:
+          MYSQL_DATABASE: ${{ env.DB_DATABASE }}
+          MYSQL_USER: ${{ env.DB_USERNAME }}
+          MYSQL_PASSWORD: ${{ env.DB_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ env.DB_ROOT_PASSWORD }}
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Enable local data loading
+        run: |
+          mysql --host=${{ env.DB_HOST }} --user=root --password=${{ env.DB_ROOT_PASSWORD }} ${{ env.DB_DATABASE }} <<MY_QUERY
+          set global local_infile=true;
+          MY_QUERY
+      - run: bundle exec rspec spec
+      - uses: actions/upload-artifact@v3
+        with:
+          name: mysql-test-coverage
+          path: coverage/lcov/csv_fast_importer.lcov
+
+  test-coverage:
+    name: Publish test coverage
+    needs: [postgres, mysql]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Recover all test coverages
+        uses: actions/download-artifact@v3
+      - run: ls -R
+      - name: Upload coverage to Codacy
+        uses: codacy/codacy-coverage-reporter-action@v1
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: postgres-test-coverage/csv_fast_importer.lcov, mysql-test-coverage/csv_fast_importer.lcov
