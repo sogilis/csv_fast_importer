@@ -132,6 +132,8 @@ You can fork and submit new pull request (with tests and explanations).
 First of all, you need to initialize your environment :
 
 ```sh
+$ brew install postgresql # in macOS
+$ apt-get install libpq-dev # in Linux
 $ bundle install
 ```
 
