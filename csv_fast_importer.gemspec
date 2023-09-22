@@ -26,7 +26,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "pg", "~> 0.21.0"
   spec.add_development_dependency "mysql2", ">= 0.4.0"
-  spec.add_development_dependency "codacy-coverage"
+  spec.add_development_dependency "simplecov"
+  spec.add_development_dependency "simplecov-lcov"
   spec.add_development_dependency "rspec"
 
   # Only for benchmark
