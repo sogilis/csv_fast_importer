@@ -63,7 +63,7 @@ GEM
     netrc (0.11.0)
     nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
-    pg (0.18.4)
+    pg (0.21.0)
     progressbar (0.21.0)
     rake (10.4.2)
     rest-client (1.8.0)
@@ -119,7 +119,7 @@ DEPENDENCIES
   csv_fast_importer!
   ferry
   mysql2 (>= 0.4.0)
-  pg (>= 0.18.4)
+  pg (~> 0.21.0)
   rake (~> 10.0)
   rspec
   smarter_csv
