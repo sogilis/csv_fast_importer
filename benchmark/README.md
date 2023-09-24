@@ -133,7 +133,7 @@ bundle exec rake test:db:create
 ```
 
 Execute benchmark
-```
+```shell
 bundle exec rake benchmark
 ```
 
