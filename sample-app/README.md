@@ -13,7 +13,7 @@ bundle exec rake db:setup
 - Execute `csv_fast_importer` rake task:
 
 ```bash
-bundle exec rake csv_fast_importe
+bundle exec rake csv_fast_importer
 ```
 
 - Verify following output:
