@@ -166,9 +166,6 @@ Use `DB_TYPE=mysql DB_USERNAME=` (with empty username) for anonymous account.
 
 `master` is the development branch and releases are published as tags.
 
-**We're not ready for the production yet (version < 1.0) so use this gem with
-precaution.**
-
 We follow the [Semantic Versioning 2.0.0](http://semver.org/) for our gem
 releases.
 
