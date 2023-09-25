@@ -1,5 +1,6 @@
 require 'pathname'
 require 'csv'
+require 'tmpdir'
 
 class CSVWriter
 
@@ -18,7 +19,7 @@ class CSVWriter
   end
 
   def new_temp_folder
-    tmp_folder = Pathname.new Dir.mktmpdir
+    tmp_folder = Pathname.new(Dir.mktmpdir)
     ObjectSpace.define_finalizer(self, proc { FileUtils.rm_rf tmp_folder })
     tmp_folder
   end

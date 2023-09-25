@@ -28,7 +28,6 @@ class TestDatabase
 
   def connect(database = @configuration['database'])
     require 'active_record'
-    ActiveRecord::Base.configurations["test"] = @configuration.merge(database: database)
-    ActiveRecord::Base.establish_connection :test
+    ActiveRecord::Base.establish_connection @configuration.merge(database: database)
   end
 end
