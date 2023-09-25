@@ -4,7 +4,7 @@ require_relative './database/postgres'
 
 module CsvFastImporter
 
-  # Build corresponding CsvFastImporter database implementation based current adapter (fetched from DatabaseConnection)
+  # Build corresponding CsvFastImporter database implementation based on current adapter (fetched from DatabaseConnection)
   module DatabaseFactory
     DATABASES = { postgresql: CsvFastImporter::Database::Postgres,
                   mysql2: CsvFastImporter::Database::Mysql
@@ -12,8 +12,8 @@ module CsvFastImporter
 
     def self.build
       adapter = CsvFastImporter::DatabaseConnection.adapter_name
-      return DATABASES[adapter].new(CsvFastImporter::DatabaseConnection.base_connection) if DATABASES.has_key?(adapter)
-      raise "Database adapter #{adapter} not supported by CsvFastImporter. Only #{DATABASES.keys.join(", ")} are supported"
+      raise "Database adapter #{adapter} not supported by CsvFastImporter. Only #{DATABASES.keys.join(", ")} are supported" unless DATABASES.has_key?(adapter)
+      return DATABASES[adapter].new(CsvFastImporter::DatabaseConnection.base_connection)
     end
   end
 end
