@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    csv_fast_importer (1.1.0)
+    csv_fast_importer (1.2.0)
       activerecord (~> 4.2)
 
 GEM
