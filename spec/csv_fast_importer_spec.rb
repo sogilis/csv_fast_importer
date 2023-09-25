@@ -192,5 +192,34 @@ describe CsvFastImporter do
       @inserted_rows_count.should eql 1
     end
   end
-end
 
+  describe 'with a block', skip_mysql: true do
+    let(:file) { write_file [ %w(id name), %w(1 Karadoc) ] }
+    subject {
+      CsvFastImporter.import(file) do |row|
+        row['name'] = row['name'].swapcase
+      end
+    }
+
+    it 'inserts rows transformed by this block' do
+      subject
+      db.query("SELECT name FROM knights WHERE id = 1").should eql 'kARADOC'
+    end
+
+    context 'and column mapping' do
+      let(:file) { write_file [ %w(id first_name), %w(1 Karadoc) ] }
+      subject {
+        CsvFastImporter.import(file, mapping: {first_name: 'name' }) do |row|
+          row['first_name'] = row['first_name'].swapcase
+        end
+      }
+
+      it 'inserts rows transformed by this block, and then apply column mapping' do
+        subject
+        db.query("SELECT name FROM knights WHERE id = 1").should eql 'kARADOC'
+      end
+    end
+  end
+
+  #FIXME write_file does not explicit a file named knights.csv
+end

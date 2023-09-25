@@ -10,7 +10,7 @@ module CsvFastImporter
       @db = CsvFastImporter::DatabaseFactory.build
     end
 
-    def run
+    def run(&block)
       @db.verify_compatibility @configuration
       row_index = 0
       within_transaction do
@@ -20,7 +20,8 @@ module CsvFastImporter
                                    target_columns,
                                    row_index_column: @configuration.row_index_column,
                                    column_separator: @configuration.column_separator,
-                                   encoding:         @configuration.encoding)
+                                   encoding:         @configuration.encoding,
+                                   &block)
       end
       row_index
     end
@@ -37,13 +38,17 @@ module CsvFastImporter
     end
 
     def target_columns
-      file_columns = @configuration.file
-                                  .gets
-                                  .split(@configuration.column_separator)
-                                  .map(&:strip)
+      file_columns = file_header.split(@configuration.column_separator)
+                           .map(&:strip)
       db_columns = file_columns.map(&:downcase)
                                .map { |column| @configuration.mapping[column] || column }
       @db_columns ||= db_columns
+    end
+
+    def file_header
+      @configuration.file.gets
+    ensure
+      @configuration.file.rewind
     end
 
     def within_transaction
