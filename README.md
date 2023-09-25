@@ -194,9 +194,18 @@ In few words:
 
 ## How to release new version?
 
-Make sure your are in `master` branch. Then, run:
+Setup rubygems.org account:
+
 ```bash
-bundle exec rake release:make[major|minor|patch|x.y.z]
+curl -u {your_gem_account_name} https://rubygems.org/api/v1/api_key.yaml > ~/.gem/credentials
+chmod 0600 ~/.gem/credentials
 ```
 
-Example: `bundle exec rake release:make[minor]`
+Make sure you are in `master` branch and run:
+
+```bash
+bundle exec rake "release:make[major|minor|patch|x.y.z]"
+```
+Example: `bundle exec rake "release:make[minor]"`
+
+Then, follow instructions.
