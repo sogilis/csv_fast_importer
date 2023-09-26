@@ -192,6 +192,8 @@ In few words:
 - [ ] Refactor tests (with should-> must / should -> expect / subject...)
 - [ ] Reduce technical debt on db connection (test & benchmark)
 - [ ] SQLite support
+- [ ] Add link to [activerecord-copy](https://github.com/pganalyze/activerecord-copy)
+- [ ] Ease local tests on multiple databases with [testcontainers](https://github.com/testcontainers/testcontainers-ruby)
 
 ## How to release new version?
 
