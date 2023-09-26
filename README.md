@@ -194,6 +194,7 @@ In few words:
 - [ ] SQLite support
 - [ ] Add link to [activerecord-copy](https://github.com/pganalyze/activerecord-copy)
 - [ ] Ease local tests on multiple databases with [testcontainers](https://github.com/testcontainers/testcontainers-ruby)
+- [ ] Accept csv header which contains column separator
 
 ## How to release new version?
 
