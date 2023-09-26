@@ -123,6 +123,35 @@ To map the `KNIGHT_EMAIL` column to the `email` database field:
 CsvFastImporter.import file, mapping: { knight_email: :email }
 ```
 
+### Block (PostgreSQL only)
+
+Besides many options, we can provide a block to modify imported data on the fly:
+
+```ruby
+CsvFastImporter.import(file) do |row|
+  row['name'] = row['name'].swapcase
+end
+```
+
+…with this file…
+
+```csv
+name;email
+Perceval;perceval@logre.cel
+Lancelot;lancelot@logre.cel
+```
+
+… will import this data:
+
+| name     | email              |
+|----------|--------------------|
+| pERCEVAL | perceval@logre.cel |
+| lANCELOT | lancelot@logre.cel |
+
+The given block is called for each row of the csv file (without the header). These rows are `Hash` where keys are columns in csv file. Any columns mapping option is applied after block call.
+
+:warning: The block usage may degrade performances. A better solution would be to import data as it is in a temporary table and finally, move data in SQL in final table with expected modificaitions.   
+
 ## Need help?
 
 See [FAQ](doc/faq.md).
